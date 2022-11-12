@@ -1,0 +1,4 @@
+from factories_implementation.CategoryFactory import CategoryFactory
+from factories_implementation.CourseFactory import CourseFactory
+from factories_implementation.TutorialFactory import TutorialFactory
+from factories_implementation.UserFactory import UserFactory
