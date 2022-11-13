@@ -1,7 +1,7 @@
 from entities import CourseEnrolled
-from factories import ICourseEnrolledFactory
 
 
-class CourseEnrolledFactory(ICourseEnrolledFactory):
-    def create_course_enrolled(self, data: dict) -> CourseEnrolled:
+class CourseEnrolledFactory:
+    @staticmethod
+    def create_course_enrolled(data: dict) -> CourseEnrolled:
         pass

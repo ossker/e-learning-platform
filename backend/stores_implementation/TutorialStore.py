@@ -1,24 +1,28 @@
 from typing import List
-
 from entities import Tutorial
-from stores import ITutorialStore
+from exts import db
 
 
-class TutorialStore(ITutorialStore):
-    def add(self, tutorial: Tutorial) -> None:
-        pass
-
-    def add_many(self, tutorial_list: List[Tutorial]) -> None:
-        pass
+class TutorialStore:
+    @staticmethod
+    def add(tutorial: Tutorial) -> None:
+        tutorial_model = TutorialMapper.entity_to_model(tutorial)
+        db.session.add(tutorial_model)
+        db.session.commit()
 
     def delete(self, tutorial: Tutorial) -> None:
         pass
 
-    def delete_many(self, tutorial_list: List[Tutorial]) -> None:
-        pass
+    @staticmethod
+    def find_by_course_id(course_id: int):
+        tutorial_models = TutorialModel.query.filter_by(id=course_id).all()
+        return [TutorialMapper.model_to_entity(tutorial) for tutorial in tutorial_models]
 
-    def find_by_course_id(self, course_id: int) -> List[Tutorial]:
-        pass
+    @staticmethod
+    def find_all():
+        tutorial_models = TutorialModel.query.all()
+        return [TutorialMapper.model_to_entity(tutorial) for tutorial in tutorial_models]
 
-    def find_all(self) -> List[Tutorial]:
-        pass
+
+from mappers import TutorialMapper
+from models import TutorialModel
