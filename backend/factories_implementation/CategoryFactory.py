@@ -1,7 +1,6 @@
 from entities import Category
-from factories import ICategoryFactory
 
-
-class CategoryFactory(ICategoryFactory):
-    def create_category(self, data: dict) -> Category:
+class CategoryFactory:
+    @staticmethod
+    def create_category(data: dict) -> Category:
         pass

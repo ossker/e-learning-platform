@@ -3,6 +3,8 @@ from typing import Optional, List
 
 from entities.Tutorial import Tutorial
 from entities.User import User
+from models import CourseModel
+from stores_implementation import CourseStore
 
 
 @dataclass
@@ -23,3 +25,9 @@ class Course:
         self.description = description
         self.owner = user
         self.tutorials = tutorials
+
+    def get_id(self) -> int:
+        course_id = CourseStore.get_id_find_by_name(self.name)
+        return course_id
+
+
