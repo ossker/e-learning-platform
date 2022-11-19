@@ -13,13 +13,13 @@ class Course:
     def __init__(
         self,
         name: str,
-        user: User,
+        owner: User,
         tutorials: Optional[List] = None,
         description: Optional[str] = None
     ):
         self.name = name
         self.description = description
-        self.owner = user
+        self.owner = owner
         self.tutorials = tutorials
 
 
