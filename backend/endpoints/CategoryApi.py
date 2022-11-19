@@ -51,7 +51,7 @@ class CategoryResource(Resource):
     def get(self, id):
         """Get a category by id"""
         category_model = find_category_by_id(id)
-        return category_model if category_model else []
+        return category_model
 
     @staticmethod
     def delete(id):
