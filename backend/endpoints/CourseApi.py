@@ -1,8 +1,6 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 
-from models.CourseModel import CourseModel
-
 course_ns = Namespace('course', description="A namespace for Course")
 
 tutorials_list = course_ns.model(
@@ -30,8 +28,7 @@ class CoursesResource(Resource):
     @course_ns.marshal_list_with(course_model_request)
     def get(self):
         """Get all courses"""
-        courses = CourseModel.query.all()
-        return courses
+        pass
 
     @course_ns.expect(course_model_request)
     @course_ns.marshal_with(course_model_request)

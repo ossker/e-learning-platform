@@ -9,6 +9,7 @@ flask-restx = "*"
 flask-sqlalchemy = "*"
 python-decouple = "*"
 flask-migrate = "*"
+flask-injector = "*"
 
 [dev-packages]
 

@@ -1,11 +1,10 @@
-from entities import User
-from models import UserModel
+from entities.User import User
+from models.UserModel import UserModel
 
 
-class UserMapper:
+def user_entity_to_model(user_entity: User) -> UserModel:
+    pass
 
-    def entity_to_model(self, user_entity: User) -> UserModel:
-        pass
 
-    def model_to_entity(self, user_model: UserModel) -> User:
-        pass
+def user_model_to_entity(user_model: UserModel) -> User:
+    pass

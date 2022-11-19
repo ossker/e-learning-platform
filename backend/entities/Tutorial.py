@@ -1,7 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, List
-
-from entities import Course
+from typing import Optional, Any
 
 
 @dataclass
@@ -9,12 +7,12 @@ class Tutorial:
     title: str
     video: Optional[str]
     content: Optional[str]
-    course: Course
+    course: Any
 
     def __init__(
         self,
         title: str,
-        course: Course,
+        course: Any,
         video: Optional[str] = None,
         content: Optional[str] = None
     ):

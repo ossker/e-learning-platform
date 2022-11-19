@@ -1,7 +1,5 @@
-from entities import User
+from entities.User import User
 
 
-class UserFactory:
-    @staticmethod
-    def create_user(data: dict) -> User:
-        pass
+def create_user(data: dict) -> User:
+    pass

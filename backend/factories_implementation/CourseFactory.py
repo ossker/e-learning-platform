@@ -1,6 +1,5 @@
-from entities import Course
+from entities.Course import Course
 
-class CourseFactory:
-    @staticmethod
-    def create_course(data: dict) -> Course:
-        pass
+
+def create_course(data: dict) -> Course:
+    pass

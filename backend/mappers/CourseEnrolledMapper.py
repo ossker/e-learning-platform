@@ -1,11 +1,10 @@
-from entities import CourseEnrolled
-from models import CourseEnrolledModel
+from entities.CourseEnrolled import CourseEnrolled
+from models.CourseEnrolledModel import CourseEnrolledModel
 
 
-class CourseEnrolledMapper:
+def course_enrolled_entity_to_model(course_enrolled_entity) -> CourseEnrolledModel:
+    pass
 
-    def entity_to_model(self, course_enrolled_entity: CourseEnrolled) -> CourseEnrolledModel:
-        pass
 
-    def model_to_entity(self, course_enrolled_model: CourseEnrolledModel) -> CourseEnrolled:
-        pass
+def course_enrolled_model_to_entity(course_enrolled_model) -> CourseEnrolled:
+    pass

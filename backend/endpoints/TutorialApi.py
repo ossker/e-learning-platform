@@ -1,9 +1,6 @@
 from flask import request
 from flask_restx import Resource, Namespace, fields
 
-from factories_implementation import TutorialFactory
-from stores_implementation import TutorialStore
-
 tutorial_ns = Namespace('tutorial', description="A namespace for Tutorial")
 
 tutorial_model_request = tutorial_ns.model(
@@ -24,16 +21,18 @@ class TutorialsResource(Resource):
     @tutorial_ns.marshal_list_with(tutorial_model_request)
     def get(self):
         """Get all tutorials"""
-        tutorials = TutorialStore.find_all()
-        return tutorials
+        # tutorials = TutorialStore.find_all()
+        # return tutorials
+        pass
 
     @tutorial_ns.expect(tutorial_model_request)
     @tutorial_ns.marshal_with(tutorial_model_request)
     def post(self):
         """Create a new tutorial"""
-        data = request.get_json()
-        new_tutorial = TutorialFactory.create_tutorial(data)
-        TutorialStore.add(new_tutorial)
+        pass
+        # data = request.get_json()
+        # new_tutorial = TutorialFactory.create_tutorial(data)
+        # TutorialStore.add(new_tutorial)
         """data = request.get_json()
                title = data.get('title')
                video = data.get('video')
@@ -68,7 +67,8 @@ class TutorialsResource(Resource):
                db.session.commit()
 
                """
-        return new_tutorial, 201
+        # return new_tutorial, 201
+        pass
 
 
 @tutorial_ns.route('/tutorial/<int:id>')
