@@ -2,7 +2,7 @@ from flask import request
 from flask_restx import Resource, Namespace, fields
 
 from factories_implementation.CategoryFactory import create_category
-from stores_implementation.CategoryStore import find_all_categories, add_category
+from stores_implementation.CategoryStore import find_all_categories, add_category, delete_category, find_category_by_id
 from mappers.CategoryMapper import category_entity_to_model
 
 category_ns = Namespace('category', description="A namespace for Category")
@@ -44,19 +44,20 @@ class CategoriesResource(Resource):
         return new_category
 
 
-
-
 @category_ns.route('/category/<int:id>')
 class CategoryResource(Resource):
-    pass
-    # def get(self, id):
-    #     """Get a category by id"""
-    #     pass
-    #
-    # def put(self, id):
-    #     """Update a category by id"""
-    #     pass
-    #
-    # def delete(self, id):
-    #     """Delete a category by id"""
-    #     pass
+
+    @category_ns.marshal_with(category_model_request)
+    def get(self, id):
+        """Get a category by id"""
+        category_model = find_category_by_id(id)
+        return category_model if category_model else []
+
+    @staticmethod
+    def delete(id):
+        """Delete a category by id"""
+        category_to_delete = find_category_by_id(id)
+        if category_to_delete:
+            delete_category(category_to_delete)
+            return f"Category id: {id} deleted."
+        return f"Category id: {id} does not exist."
