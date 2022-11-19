@@ -1,11 +1,30 @@
-from entities import Category
-from models import CategoryModel
+from typing import List, Dict
+
+from entities.Category import Category
+from models.CategoryModel import CategoryModel
+from stores_implementation.CourseStore import course_find_indexes_by_category_id
 
 
-class CategoryMapper:
+def category_entity_to_model(category_entity) -> CategoryModel:
+    return CategoryModel(
+        name=category_entity.name
+    )
 
-    def entity_to_model(self, category_entity: Category) -> CategoryModel:
-        pass
 
-    def model_to_entity(self, category_model: CategoryModel) -> Category:
-        pass
+def category_model_to_entity(category_model) -> Category:
+    courses = course_find_indexes_by_category_id(category_model.id)
+    return Category(
+        name=category_model.name,
+        courses=courses
+    )
+
+
+def category_model_to_dict(category_model: CategoryModel) -> Dict:
+    return {
+        "name": category_model.name,
+        "courses": [
+            {"course_id": course.id,
+             "name": course.name,
+             } for course in category_model.courses
+        ]
+    }

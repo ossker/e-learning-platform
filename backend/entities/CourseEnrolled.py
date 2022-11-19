@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from entities import Course
+from entities.Course import Course
 from entities.User import User
 
 

@@ -1,6 +1,6 @@
-from entities import Category
+from entities.Category import Category
 
-class CategoryFactory:
-    @staticmethod
-    def create_category(data: dict) -> Category:
-        pass
+
+def create_category(data: dict) -> Category:
+    name = data.get('name')
+    return Category(name=name)

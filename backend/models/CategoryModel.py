@@ -13,7 +13,7 @@ class CategoryModel(db.Model):
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
 
-    courses = db.relationship("CourseModel", secondary=category_to_course_table, backref="courses")
+    courses = db.relationship("CourseModel", secondary=category_to_course_table)
 
     """
     category = Category()

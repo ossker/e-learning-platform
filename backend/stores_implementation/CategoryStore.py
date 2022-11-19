@@ -1,17 +1,14 @@
 from typing import List
 
-from entities import Category
+from exts import db
+from models.CategoryModel import CategoryModel
 
 
-class CategoryStore:
-    def add(self, category: Category) -> None:
-        pass
+def add_category(category) -> None:
+    db.session.add(category)
+    db.session.commit()
 
-    def delete(self, category: Category) -> None:
-        pass
 
-    def find_by_course_id(self, course_id: int) -> List:
-        pass
-
-    def find_all(self):
-        pass
+def find_all_categories():
+    category_models = CategoryModel.query.all()
+    return category_models

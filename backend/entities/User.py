@@ -11,13 +11,13 @@ class User:
     avatar: str
 
     def __init__(
-        self,
-        username: str,
-        first_name: str,
-        last_name: str,
-        email: str,
-        password: str,
-        avatar: str
+            self,
+            username: str,
+            first_name: str,
+            last_name: str,
+            email: str,
+            password: str,
+            avatar: str
     ):
         self.username = username
         self.first_name = first_name
