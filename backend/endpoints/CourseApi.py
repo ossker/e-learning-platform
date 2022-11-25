@@ -1,4 +1,5 @@
-from flask import request
+from flask import request, jsonify
+from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
 
 from factories_implementation.CourseFactory import create_course
@@ -35,8 +36,10 @@ class CoursesResource(Resource):
         courses = find_all_courses()
         return courses
 
+
     @course_ns.expect(course_model_request)
     @course_ns.marshal_with(course_model_request)
+    @jwt_required()
     def post(self):
         """Create a new course"""
         data = request.get_json()
@@ -58,10 +61,11 @@ class CourseResource(Resource):
         course_model = find_course_by_id(id)
         return course_model if course_model else []
 
+    @jwt_required()
     def delete(self, id):
         """Delete a course by id"""
         course_to_delete = find_course_by_id(id)
         if course_to_delete:
             delete_course(course_to_delete)
-            return f"Course id: {id} deleted."
-        return f"Course id: {id} does not exist."
+            return jsonify({"message": f"Course id: {id} deleted."})
+        return jsonify({"message": f"Course id: {id} does not exist."})

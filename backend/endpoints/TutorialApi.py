@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
 
 tutorial_ns = Namespace('tutorial', description="A namespace for Tutorial")
@@ -27,6 +28,7 @@ class TutorialsResource(Resource):
 
     @tutorial_ns.expect(tutorial_model_request)
     @tutorial_ns.marshal_with(tutorial_model_request)
+    @jwt_required()
     def post(self):
         """Create a new tutorial"""
         pass
@@ -77,10 +79,12 @@ class TutorialResource(Resource):
         """Get a tutorial by id"""
         pass
 
+    @jwt_required()
     def put(self, id):
         """Update a tutorial by id"""
         pass
 
+    @jwt_required()
     def delete(self, id):
         """Delete a tutorial by id"""
         pass

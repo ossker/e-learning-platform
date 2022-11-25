@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -8,7 +9,7 @@ class User:
     last_name: str
     email: str
     password: str
-    avatar: str
+    avatar: Optional[str]
 
     def __init__(
             self,
@@ -17,7 +18,7 @@ class User:
             last_name: str,
             email: str,
             password: str,
-            avatar: str
+            avatar: Optional[str] = None
     ):
         self.username = username
         self.first_name = first_name

@@ -1,4 +1,5 @@
-from flask import request
+from flask import request, jsonify
+from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
 
 from factories_implementation.CategoryFactory import create_category
@@ -35,6 +36,7 @@ class CategoriesResource(Resource):
 
     @category_ns.expect(category_model_request)
     @category_ns.marshal_with(category_model_request)
+    @jwt_required()
     def post(self):
         """Create a new category"""
         data = request.get_json()
@@ -53,11 +55,11 @@ class CategoryResource(Resource):
         category_model = find_category_by_id(id)
         return category_model
 
-    @staticmethod
-    def delete(id):
+    @jwt_required()
+    def delete(self, id):
         """Delete a category by id"""
         category_to_delete = find_category_by_id(id)
         if category_to_delete:
             delete_category(category_to_delete)
-            return f"Category id: {id} deleted."
-        return f"Category id: {id} does not exist."
+            return jsonify({"message": f"Category id: {id} deleted."})
+        return jsonify({"message": f"Category id: {id} does not exist."})

@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager
+
 from exts import db
 from flask_migrate import Migrate
 from flask_restx import Api
@@ -29,7 +31,7 @@ def create_app(config):
     db.init_app(app)
 
     migrate = Migrate(app, db)
-
+    JWTManager(app)
     api = Api(app, doc='/docs')
 
     api.add_namespace(auth_ns)
