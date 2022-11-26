@@ -5,6 +5,7 @@ import Course from './Course'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import LoginPage from './Login'
+import Tutorial from './Tutorial'
 
 const LoggedInUpdateCourse=(id)=>{
     const [course, setCourse] = useState();
@@ -43,17 +44,12 @@ const LoggedInUpdateCourse=(id)=>{
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Tutorial</Form.Label>
-                    <Form.Control as="textarea" rows={5}
-                    />
-                </Form.Group>
-
-                <Form.Group>
                     <Button variant="primary">
                         Save
                     </Button>
                 </Form.Group>
             </form>
+            <Tutorials courseId={id.id}/>
         </div>
     )
     
@@ -62,11 +58,39 @@ const LoggedInUpdateCourse=(id)=>{
 const UpdateCoursePage = () => {
     const [logged]=useAuth();
     let {id} = useParams();
-    console.log(id)
     return(
         <>
             {logged?<LoggedInUpdateCourse id={id}/>:<LoginPage/>}
         </>
+    )
+}
+
+
+const Tutorials = (courseId) => {
+    const [tutorials, setTutorials] = useState();
+    
+    useEffect(
+        ()=>{
+            fetch(`/tutorial/tutorials-course/${courseId.courseId}`)
+            .then(res=>res.json())
+            .then(data=>{
+                console.log(data)
+                setTutorials(data)
+            })
+            .catch(err=>console.log(err))
+        },[]
+        
+    );
+    return (
+        <div>
+            <h3>TUTORIALS HERE</h3>
+        {
+            tutorials?.map((tutorial, index)=>(
+                    <Tutorial key={index} title={tutorial.title} content={tutorial.content}/>
+                )
+            )
+        }
+        </div>
     )
 }
 

@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash
 from factories_implementation.UserFactory import create_user
 from mappers.UserMapper import user_entity_to_model
 from models.UserModel import UserModel
-from stores_implementation.UserStore import add_user, find_user_by_username
+from stores_implementation.UserStore import add_user, find_user_by_username, find_user_by_email
 
 auth_ns = Namespace('auth', description="A namespace for Authentication")
 
@@ -27,6 +27,19 @@ login_model = auth_ns.model(
     {
         'username': fields.String(),
         'password': fields.String()
+    }
+)
+
+user_model_request = auth_ns.model(
+    "User",
+    {
+        "id": fields.Integer(),
+        "username": fields.String(),
+        "first_name": fields.String(),
+        "last_name": fields.String(),
+        "email": fields.String(),
+        "password": fields.String(),
+        "avatar": fields.String(),
     }
 )
 
@@ -70,3 +83,13 @@ class Refresh(Resource):
         current_user = get_jwt_identity()
         new_access_token = create_access_token(identity=current_user)
         return make_response(jsonify({"access_token": new_access_token}), 200)
+
+
+@auth_ns.route('/actual-user')
+class ActualUser(Resource):
+    @auth_ns.marshal_list_with(user_model_request)
+    @jwt_required()
+    def get(self):
+        current_user = get_jwt_identity()
+        user_model = find_user_by_email(current_user)
+        return user_model

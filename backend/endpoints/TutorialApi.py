@@ -2,6 +2,8 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
 
+from stores_implementation.TutorialStore import find_tutorials_by_course_id
+
 tutorial_ns = Namespace('tutorial', description="A namespace for Tutorial")
 
 tutorial_model_request = tutorial_ns.model(
@@ -14,6 +16,15 @@ tutorial_model_request = tutorial_ns.model(
         "course_id": fields.Integer()
     }
 )
+
+
+@tutorial_ns.route('/tutorials-course/<int:id>')
+class TutorialsCourseResource(Resource):
+    @tutorial_ns.marshal_list_with(tutorial_model_request)
+    def get(self, id):
+        """Get tutorials by course id"""
+        tutorials = find_tutorials_by_course_id(id)
+        return tutorials if tutorials else []
 
 
 @tutorial_ns.route('/tutorials')

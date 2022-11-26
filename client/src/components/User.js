@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom'
 
 const LoggedInUser=()=>{
     const [courses, setCourses] = useState([]);
+    const [user, setUser] = useState();
     const history = useHistory()
     
     
@@ -28,8 +29,18 @@ const LoggedInUser=()=>{
             fetch('/course/courses-owner', requestOptions)
             .then(res=>res.json())
             .then(data=>{
-                console.log(data)
                 setCourses(data)
+            })
+            .catch(err=>console.log(err))
+        },[]
+    );
+
+    useEffect(
+        ()=>{
+            fetch('/auth/actual-user', requestOptions)
+            .then(res=>res.json())
+            .then(data=>{
+                setUser(data)
             })
             .catch(err=>console.log(err))
         },[]
@@ -37,7 +48,7 @@ const LoggedInUser=()=>{
 
     return(
         <div className='container'>
-        <h1>You uploaded these courses:</h1>
+        <h1> {user?.username}, you uploaded these courses:</h1>
         {
             courses.map(
                 (course, index)=>(
