@@ -103,7 +103,7 @@ const LoggedInHome=()=>{
                 courses.map(
                     (course, index)=>(
                         <Course key={index} name={course.name} description={course.description} owner={course.owner}
-                        onClick={()=>{showModal(course.id)}}
+                        onClick={()=>{showModal(course.id)}} update={false}
                         />
                     )
                 )

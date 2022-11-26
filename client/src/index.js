@@ -8,6 +8,7 @@ import HomePage from './components/Home';
 import SignUpPage from './components/SignUp';
 import LoginPage from './components/Login';
 import AddCoursePage from './components/AddCourse';
+import UserPage from './components/User';
 
 const App = () => {
 
@@ -24,6 +25,9 @@ const App = () => {
                     </Route>
                     <Route path="/signup">
                         <SignUpPage/>
+                    </Route>
+                    <Route path="/user">
+                        <UserPage/>
                     </Route>
                     <Route path="/">
                         <HomePage/>
