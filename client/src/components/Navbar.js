@@ -10,7 +10,7 @@ const LoggedInLinks=()=>{
                 <Link className="nav-link active" to="/add_course">Add Course</Link>
             </li>
             <li className="nav-item">
-                <a className="nav-link active" href="#" onClick={()=>{logout()}}>Log Out</a>
+                <a className="nav-link active" href="/" onClick={()=>{logout()}}>Log Out</a>
             </li>
         </>
     )

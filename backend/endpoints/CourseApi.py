@@ -4,7 +4,8 @@ from flask_restx import Resource, Namespace, fields
 
 from factories_implementation.CourseFactory import create_course
 from mappers.CourseMapper import course_entity_to_model
-from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course
+from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course, \
+    update_course
 
 course_ns = Namespace('course', description="A namespace for Course")
 
@@ -60,6 +61,15 @@ class CourseResource(Resource):
         """Get a course by id"""
         course_model = find_course_by_id(id)
         return course_model if course_model else []
+
+    @course_ns.marshal_with(course_model_request)
+    @jwt_required()
+    def put(self, id):
+        """Update a course by id"""
+        course_to_update = find_course_by_id(id)
+        data = request.get_json()
+        update_course(course_to_update, data)
+        return course_to_update
 
     @jwt_required()
     def delete(self, id):
