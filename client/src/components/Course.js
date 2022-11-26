@@ -8,7 +8,7 @@ const Course = ({name, description, owner, onClick, update})=>{
                 <Card.Title>{name}</Card.Title>
                 <p>{description}</p>
                 <p>{owner}</p>
-                {update?<Button variant='primary' onClick={onClick}>Update</Button>:<p></p>}
+                {update?<Button variant='primary' onClick={onClick}>Update / Add tutorial</Button>:<p></p>}
                 
             </Card.Body>
             
