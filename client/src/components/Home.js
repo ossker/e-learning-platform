@@ -56,6 +56,7 @@ const LoggedInHome=()=>{
         fetch(`/course/course/${courseId}`, requestOptions)
         .then(res=>res.json())
         .then(data=>{
+            console.log(courseId)
             window.location.reload()
         })
         .catch(err=>console.log(err))

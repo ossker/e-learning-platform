@@ -24,6 +24,12 @@ def delete_course(course) -> None:
     db.session.commit()
 
 
+def update_course(course, data) -> None:
+    course.name = data.get('name')
+    course.description = data.get('description')
+    db.session.commit()
+
+
 def add_course(course) -> None:
     db.session.add(course)
     db.session.commit()
