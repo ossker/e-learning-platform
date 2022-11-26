@@ -55,8 +55,8 @@ class Login(Resource):
         password = data.get('password')
         db_user = find_user_by_username(username)
         if db_user and check_password_hash(db_user.password, password):
-            access_token = create_access_token(identity=db_user.username)
-            refresh_token = create_refresh_token(identity=db_user.username)
+            access_token = create_access_token(identity=db_user.email)
+            refresh_token = create_refresh_token(identity=db_user.email)
             return jsonify({
                 "access_token": access_token,
                 "refresh_token": refresh_token
