@@ -7,9 +7,7 @@ const AddCoursePage = () => {
     const { register, handleSubmit, reset, formState:{errors} } = useForm()
 
     const createCourse = (data) =>{
-        console.log(data)
         const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
-        console.log(token)
         const requestOptions ={
             method: 'POST',
             headers: {
@@ -21,7 +19,9 @@ const AddCoursePage = () => {
 
         fetch('/course/courses', requestOptions)
         .then(res=>res.json())
-        .then(data=>console.log(data))
+        .then(data=>{
+            reset()
+        })
         .catch(err=>console.log(err))
         
     }
