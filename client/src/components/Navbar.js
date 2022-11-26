@@ -46,6 +46,9 @@ const NavBar = () => {
                             <Link className="nav-link active" to="/">Home</Link>
                         </li>
                         {logged?<LoggedInLinks/>:<LoggedOutLinks/>}
+                        <li className="nav-item">
+                            <Link className="nav-link active" to="/user">User</Link>
+                        </li>
                     </ul>
                 </div>
             </div>
