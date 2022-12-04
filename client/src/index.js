@@ -9,6 +9,7 @@ import SignUpPage from './components/SignUp';
 import LoginPage from './components/Login';
 import AddCoursePage from './components/AddCourse';
 import UserPage from './components/User';
+import UpdateCoursePage from './components/UpdateCourse';
 
 const App = () => {
 
@@ -28,6 +29,9 @@ const App = () => {
                     </Route>
                     <Route path="/user">
                         <UserPage/>
+                    </Route>
+                    <Route path="/update-course/:id">
+                        <UpdateCoursePage/>
                     </Route>
                     <Route path="/">
                         <HomePage/>

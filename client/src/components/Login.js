@@ -2,14 +2,30 @@ import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { login } from '../auth'
+import { login, useAuth } from '../auth'
 import { useHistory } from 'react-router-dom'
 
 const LoginPage = () => {
 
     const {register, watch, handleSubmit, reset, formState:{errors}} = useForm();
-    const history = useHistory();
+    
 
+    
+    const [logged]=useAuth();
+    
+    return(
+        <div className='container'>
+            <div className='form'>
+                <h1>Login Page</h1>
+                {logged?<div>You are logged in.</div>:<LoginForm/>}
+            </div>
+        </div>
+    )
+}
+
+const LoginForm = () =>{
+    const {register, watch, handleSubmit, reset, formState:{errors}} = useForm();
+    const history = useHistory();
     const loginUser = (data) => {
         console.log(data)
 
@@ -32,12 +48,8 @@ const LoginPage = () => {
 
         reset()
     }
-
     return(
-        <div className='container'>
-            <div className='form'>
-                <h1>Login Page</h1>
-                <form>
+        <form>
                     <Form.Group>
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" 
@@ -65,8 +77,6 @@ const LoginPage = () => {
                         <small>Do not have an account? <Link to="/signup">Create one.</Link></small>
                     </Form.Group>
                 </form>
-            </div>
-        </div>
     )
 }
 

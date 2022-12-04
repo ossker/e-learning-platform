@@ -90,4 +90,4 @@ class CoursesOwnerResource(Resource):
     def get(self):
         """Get courses by owner id"""
         courses = find_courses_by_owner_id()
-        return courses
+        return courses if courses else []
