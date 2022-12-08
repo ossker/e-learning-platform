@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import { useAuth } from '../auth'
-import Course from './Course'
+import Course from '../components/Course'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import LoginPage from './Login'
-import UpdateCoursePage from './UpdateCourse'
+import LoginPage from './LoginPage'
+import UpdateCoursePage from '../components/UpdateCourse'
 import { useHistory } from 'react-router-dom'
 
 
