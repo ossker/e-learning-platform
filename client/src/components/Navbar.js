@@ -1,6 +1,8 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import { useAuth, logout } from '../auth'
+import styled from "styled-components";
+import { MdMenu, MdShoppingCart, MdPerson, MdAddCircle,MdPersonAddAlt1, MdLogin } from 'react-icons/md';
 
 
 const LoggedInLinks=()=>{
@@ -9,9 +11,7 @@ const LoggedInLinks=()=>{
             <li className="nav-item">
                 <Link className="nav-link active" to="/add_course">Add Course</Link>
             </li>
-            <li className="nav-item">
-                <a className="nav-link active" href="/" onClick={()=>{logout()}}>Log Out</a>
-            </li>
+            
         </>
     )
 }
@@ -34,26 +34,75 @@ const NavBar = () => {
     const [logged] = useAuth();
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container-fluid">
-                <Link className="navbar-brand" to="/">E-learning Platform</Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link className="nav-link active" to="/">Home</Link>
-                        </li>
-                        {logged?<LoggedInLinks/>:<LoggedOutLinks/>}
-                        <li className="nav-item">
-                            <Link className="nav-link active" to="/user">User</Link>
-                        </li>
-                    </ul>
+        <NavbarWrapper className="bg-white flex">
+            <div className="container w-100">
+                <div className="brand-and-toggler flex flex-between w-100">
+                    <Link to="/" className="navbar-brand text-uppercase ls-1 fw-8">
+                        Kur<span>siki</span>
+                    </Link>
+                    <div className="navbar-btn flex">
+                        <Link to="/login" className="cart-btn">
+                        <MdLogin/>
+                        </Link>
+                        <Link to="/signup" className="cart-btn">
+                            <MdPersonAddAlt1/>
+                        </Link>
+                        <Link to="/add-course" className="cart-btn">
+                            <MdAddCircle/>
+                        </Link>
+                        <Link to="/user" className="cart-btn">
+                            <MdPerson/>
+                        </Link>
+                        <a className="cart-btn" href="/" onClick={()=>{logout()}}>Log Out</a>
+                        
+                        
+                    </div>
                 </div>
             </div>
-        </nav>
+        </NavbarWrapper>
+
     )
 }
+
+const NavbarWrapper = styled.nav`
+    height: 80px;
+    box-shadow: rgba(50, 50, 93, 0.15) 0px 16px 12px -2px, rgba(0, 0, 0, 0.2) 0px 3px 7px -3px;
+
+    .navbar-brand{
+        font-size: 23px;
+        span{
+          color: var(--clr-orange);
+        }
+      }
+
+      .cart-btn{
+        margin-right: 18px;
+        font-size: 23px;
+        position: relative;
+        .item-count-badge{
+          background-color: var(--clr-orange);
+          position: absolute;
+          right: -10px;
+          top: -10px;
+          font-size: 12px;
+          font-weight: 700;
+          display: block;
+          width: 23px;
+          height: 23px;
+          color: var(--clr-white);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .sidebar-open-btn{
+        transition: all 300ms ease-in-out;
+        &:hover{
+          opacity: 0.7;
+        }
+      }
+`;
 
 export default NavBar

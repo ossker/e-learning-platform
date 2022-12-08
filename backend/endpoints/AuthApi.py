@@ -50,9 +50,13 @@ class SignUp(Resource):
     def post(self):
         data = request.get_json()
         username = data['username']
-        db_user = UserModel.query.filter_by(username=username).first()
-        if db_user is not None:
-            return jsonify({"message": f"User with username: {username} already exists."})
+        email = data['email']
+        db_user_username = UserModel.query.filter_by(username=username).first()
+        db_user_email = UserModel.query.filter_by(username=email).first()
+        if db_user_username is not None:
+            return jsonify({"message": f"User with username {username} already exists."})
+        elif db_user_email is not None:
+            return jsonify({"message": f"User with username {email} already exists."})
         new_user_entity = create_user(data)
         new_user_model = user_entity_to_model(new_user_entity)
         add_user(new_user_model)
@@ -74,6 +78,8 @@ class Login(Resource):
                 "access_token": access_token,
                 "refresh_token": refresh_token
             })
+        else:
+            return jsonify({"message": f"Invalid username or password."})
 
 
 @auth_ns.route('/refresh')

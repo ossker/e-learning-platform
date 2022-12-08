@@ -4,7 +4,7 @@ import { useAuth } from '../auth'
 import Course from './Course'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import LoginPage from './Login'
+import LoginPage from '../pages/LoginPage'
 import Tutorial from './Tutorial'
 
 const LoggedInUpdateCourse=(id)=>{
