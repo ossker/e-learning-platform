@@ -50,7 +50,7 @@ const NavBar = () => {
                         <Link to="/add-course" className="cart-btn">
                             <MdAddCircle/>
                         </Link>
-                        <Link to="/user" className="cart-btn">
+                        <Link to="/my-profile" className="cart-btn">
                             <MdPerson/>
                         </Link>
                         <a className="cart-btn" href="/" onClick={()=>{logout()}}>Log Out</a>

@@ -1,19 +1,16 @@
 from dataclasses import dataclass
-from typing import Optional, List
-
-from entities.Course import Course
 
 
 @dataclass
 class Category:
     name: str
-    courses: Optional[List[Course]]
+    image: str
 
     def __init__(
         self,
         name: str,
-        courses: Optional[List[Course]] = None
+        image: str
     ):
         self.name = name
-        self.courses = courses
+        self.image = image
 #

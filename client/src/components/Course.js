@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {Link} from "react-router-dom";
 import StarRating from './StarRating';
 import { course_images } from "../utils/images";
 
 const Course = (props) => {
-    console.log("PROPS:")
-    console.log(props)
-    const {id, description, name, owner, update} = props;
+    
+    const {id, description, name, owner, image, updated_date, actual_price, discounted_price, is_free, language, topics, edit} = props;
   
+    const [imageDisplay, setImageDisplay] = useState('')
+    const [price, setPrice] = useState(0)
+    const [user, setUser] = useState('')
+    useEffect(()=>{
 
+      fetch(`/auth/user/${owner}`)
+        .then(res=>res.json())
+        .then(data=>{
+          setUser(data)
+        })
+        .catch(err=>console.log(err))
+
+
+      if(image){
+        setImageDisplay(image)
+      }
+      else{
+        setImageDisplay(course_images.image)
+      }
+    }, [])
+
+    
   return (
     <CourseCard>
       <div className='item-img'>
@@ -17,21 +37,25 @@ const Course = (props) => {
       </div>
       <div className='item-body'>
         <h5 className='item-name'>{name}</h5>
-        <span className='item-creator'>{owner}</span>
+        <span className='item-creator'><Link to = {`/users/${id}`}>{user.username}</Link></span>
         <div className='item-rating flex'>
           <span className='rating-star-val'>{4}</span>
           <StarRating rating_star = {4} />
           <span className='rating-count'>(43)</span>
         </div>
         <div className='item-price'>
-          <span className='item-price-new'>Free</span>
+          {!is_free? <div><span className='item-price-new'>${discounted_price}</span>
+          <span className='item-price-old'>${actual_price}</span></div>:<span className='item-price-new'>Free</span>}
+          
         </div>
       </div>
       <div className='item-btns flex'>
         <Link to = {`/courses/${id}`} className = "item-btn see-details-btn">See details</Link>
+        {edit?<Link to = {`/`} className = "item-btn see-details-btn">Edit Course</Link>:""}
       </div>
     </CourseCard>
   )
+
 }
 
 const CourseCard = styled.div`

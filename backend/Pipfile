@@ -11,6 +11,7 @@ python-decouple = "*"
 flask-migrate = "*"
 flask-injector = "*"
 flask-cors = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 

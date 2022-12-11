@@ -6,15 +6,15 @@ import { useForm }  from 'react-hook-form'
 import {  MdReportGmailerrorred, MdCancel } from 'react-icons/md';
 import { login, useAuth } from '../auth'
 
-const Signup = () => {
+const Login = () => {
 
     const {register, watch, handleSubmit, reset, formState:{errors}} = useForm();
     const history = useHistory();
     const [logged]=useAuth();
     const [serverResponse, setServerResponse] = useState("");
     const [showError, setShowError] = useState();
+
     const loginUser = (data) => {
-        
         const requestOptions={
             method:"POST",
             headers:{
@@ -85,7 +85,7 @@ const Signup = () => {
 
                                                     <div className="text-center text-lg-start mt-4 pt-2">
                                                         <p className="small text-center fw-bold mt-2 pt-1 mb-0">Do not have an account?
-                                                            <NavLink to="/login"style={{color: 'rgb(99, 47, 245)'}}> Sign up</NavLink>
+                                                            <NavLink to="/signup"style={{color: 'rgb(99, 47, 245)'}}> Sign up</NavLink>
                                                         </p>
                                                     </div>
                                                     
@@ -211,4 +211,4 @@ const ButtonWrapper = styled.div`
 }
 `
 
-export default Signup
+export default Login

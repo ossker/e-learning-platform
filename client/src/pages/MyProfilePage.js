@@ -1,24 +1,60 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import {Link, Redirect, useParams} from 'react-router-dom'
+import { useAuth } from '../auth'
+import Course from '../components/Course'
+import { Modal, Form, Button } from 'react-bootstrap'
+import { useForm } from 'react-hook-form'
+import LoginPage from './LoginPage'
+import { useHistory } from 'react-router-dom'
 import styled from "styled-components";
 import { hero_images, user_images } from "../utils/images";
 import { course_images } from "../utils/images";
 import {BsLinkedin, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
 import UserCourseList from "../components/UserCourseList";
-const UserPage = () => {
-    const {id} = useParams();
-    const [user, setUser] = useState('')
-    useEffect(()=>{
+import MyProfileCoursesList from '../components/MyProfileCoursesList'
 
-      fetch(`/auth/user/${id}`)
-        .then(res=>res.json())
-        .then(data=>{
-          setUser(data)
-        })
-        .catch(err=>console.log(err))
 
-    }, [])
+const LoggedInUser=(id)=>{
+    const [courses, setCourses] = useState([]);
+    const [user, setUser] = useState();
+    const history = useHistory()
+    
+    
+    const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    const requestOptions ={
+        method: 'GET',
+        headers: {
+            'content-type':'application/json',
+            'Authorization': `Bearer ${JSON.parse(token)}`
+        }
+    }
 
+    useEffect(
+        ()=>{
+            fetch('/course/my-courses', requestOptions)
+            .then(res=>res.json())
+            .then(data=>{
+                setCourses(data)
+            })
+            .catch(err=>console.log(err))
+        },[]
+    );
+
+    console.log("actual courses")
+    console.log(courses)
+
+    useEffect(
+        ()=>{
+            fetch('/auth/actual-user', requestOptions)
+            .then(res=>res.json())
+            .then(data=>{
+                setUser(data)
+            })
+            .catch(err=>console.log(err))
+        },[]
+    );
+    console.log("actual user")
+    console.log(user)
     return(
         <UserPageWrapper>
             <div className="header__wrapper">
@@ -28,7 +64,7 @@ const UserPage = () => {
                     <div className="left__col">
                     <div className="img__container">
                         <img src={user_images.default_user} alt={user?.username} />
-                        
+                        <span></span>
                     </div>
                     <h2>{user?.username}</h2>
                     <p>{user?.first_name} {user?.last_name}</p>
@@ -42,7 +78,7 @@ const UserPage = () => {
 
                     <div className="content">
                         <p>
-                        {user?.about_me}
+                        {user?.about_me?user?.about_me:"I am a new user of this platform. I haven't set up my profile yet :)"}
                         </p>
                         <ul>
                             {user?.fb_link?<i className="fab"><Link to={{ pathname: user?.fb_link }} target="_blank"><BsFacebook/></Link></i>:""}
@@ -53,11 +89,28 @@ const UserPage = () => {
                     </div>
                     </div>
                     <div className="right__col">
-                        <UserCourseList id={id}/>
+                        <ButtonsWrapper>
+                            <div className='item-btns flex'>
+                                <Link to = {`/`} className = "item-btn see-details-btn">Edit Profile</Link>
+                                <Link to = {`/`} className = "item-btn see-details-btn">Add Course</Link>
+                            </div>
+                        </ButtonsWrapper>
+                        <MyProfileCoursesList/>
                     </div>
                 </div>
             </div>
         </UserPageWrapper>
+    )
+    
+}
+
+const MyProfilePage = () => {
+    const [logged]=useAuth();
+    const {id} = useParams();
+    return(
+        <>
+            {logged?<LoggedInUser id={id}/>:<LoginPage/>}
+        </>
     )
 }
 
@@ -133,7 +186,6 @@ body {
     max-width: 350px;
     position: relative;
     margin: 0 auto;
-    min-width: 300px;
   }
   
   .header__wrapper .cols__container .left__col .img__container {
@@ -194,6 +246,9 @@ body {
     background: #cccccc;
     height: 1px;
     width: 100%;
+  }
+  .header__wrapper .cols__container .content{
+    min-width: 100px;
   }
   .header__wrapper .cols__container .content p {
     font-size: 1rem;
@@ -275,6 +330,7 @@ body {
     }
     .header__wrapper .cols__container .left__col {
       padding: 25px 0px;
+      min-width: 300px;
     }
     .header__wrapper .cols__container .right__col nav ul {
       flex-direction: row;
@@ -286,8 +342,13 @@ body {
       padding: 0 0 30px;
     }
   }
-  
+  @media (max-width: 1017px) {
+  .header__wrapper .cols__container .right__col{
+    align-items: center;
+  }
+}
   @media (min-width: 1017px) {
+    
     .header__wrapper .cols__container .left__col {
       margin: 0;
       margin-right: auto;
@@ -301,4 +362,5 @@ body {
   }
 `
 
-export default UserPage
+
+export default MyProfilePage;

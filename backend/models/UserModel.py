@@ -11,6 +11,11 @@ class UserModel(db.Model):
     email = db.Column(db.String(80), nullable=False)
     password = db.Column(db.Text(), nullable=False)
     avatar = db.Column(db.Text(), nullable=True)
+    about_me = db.Column(db.String(1000), nullable=True)
+    fb_link = db.Column(db.Text(), nullable=True)
+    li_link = db.Column(db.Text(), nullable=True)
+    tw_link = db.Column(db.Text(), nullable=True)
+    yt_link = db.Column(db.Text(), nullable=True)
 
     courses_owning = db.relationship("CourseModel")
     courses = db.relationship("CourseModel", secondary="course_enrolled")
