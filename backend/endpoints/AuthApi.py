@@ -7,7 +7,9 @@ from werkzeug.security import check_password_hash
 from factories_implementation.UserFactory import create_user
 from mappers.UserMapper import user_entity_to_model
 from models.UserModel import UserModel
-from stores_implementation.UserStore import add_user, find_user_by_username, find_user_by_email
+from stores_implementation.CourseStore import find_all_courses, find_course_by_id
+from stores_implementation.UserStore import add_user, find_user_by_username, find_user_by_email, find_user_by_id, \
+    find_all_users
 
 auth_ns = Namespace('auth', description="A namespace for Authentication")
 
@@ -40,6 +42,12 @@ user_model_request = auth_ns.model(
         "email": fields.String(),
         "password": fields.String(),
         "avatar": fields.String(),
+        "about_me": fields.String(),
+        "fb_link": fields.String(),
+        "li_link": fields.String(),
+        "yt_link": fields.String(),
+        "tw_link": fields.String(),
+
     }
 )
 
@@ -99,3 +107,29 @@ class ActualUser(Resource):
         current_user = get_jwt_identity()
         user_model = find_user_by_email(current_user)
         return user_model
+
+@auth_ns.route('/user/<int:id>')
+class UserResource(Resource):
+    @auth_ns.marshal_with(user_model_request)
+    def get(self, id):
+        """Get a user by id"""
+        user_model = find_user_by_id(id)
+        return user_model
+
+@auth_ns.route('/userCourse/<int:id>')
+class UserByCourseIdResource(Resource):
+    @auth_ns.marshal_with(user_model_request)
+    def get(self, id):
+        """Get a user by course id"""
+        course = find_course_by_id(id)
+        user_model = find_user_by_id(course.owner)
+        return user_model
+
+@auth_ns.route('/users')
+class UsersResource(Resource):
+
+    @auth_ns.marshal_list_with(user_model_request)
+    def get(self):
+        """Get all users"""
+        users = find_all_users()
+        return users

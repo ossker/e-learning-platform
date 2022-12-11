@@ -17,12 +17,14 @@ def find_all_courses() -> List[CourseModel]:
     return courses_models
 
 
-def find_courses_by_owner_id(owner_id=None) -> List[CourseModel]:
+def find_courses_by_logged_user() -> List[CourseModel]:
     current_user_email = get_jwt_identity()
-    if owner_id:
-        owner = find_user_by_id(owner_id)
-    else:
-        owner = find_user_by_email(current_user_email)
+    owner = find_user_by_email(current_user_email)
+    course_models = CourseModel.query.filter_by(owner=owner.id).all()
+    return course_models
+
+def find_courses_by_owner_id(owner_id) -> List[CourseModel]:
+    owner = find_user_by_id(owner_id)
     course_models = CourseModel.query.filter_by(owner=owner.id).all()
     return course_models
 

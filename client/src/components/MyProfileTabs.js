@@ -3,29 +3,48 @@ import styled from "styled-components";
 import { useCourses } from '../context/courses_context';
 import Course from "./Course";
 
-const Tabs = () => {
-  const courses=useCourses();
+const MyProfileTabs = () => {
+    const [courses, setCourses] = useState([]);
+    const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    const requestOptions ={
+        method: 'GET',
+        headers: {
+            'content-type':'application/json',
+            'Authorization': `Bearer ${JSON.parse(token)}`
+        }
+    }
+
+    useEffect(
+        ()=>{
+            fetch('/course/my-courses', requestOptions)
+            .then(res=>res.json())
+            .then(data=>{
+                setCourses(data)
+            })
+            .catch(err=>console.log(err))
+        },[]
+    );
   return (
-    <TabsWrapper>
+    <UserTabsWrapper>
       <div className='tabs'>
         <div className='tabs-body'>
           {
             courses?.map(
               (course, index)=>(
-                  <Course key={index} id={course.id} description={course.description} name={course.name} owner={course.owner} image={course.image} updated_date={course.updated_date}
-                   actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} update={false} 
+                  <Course key={index} id={course.id} description={course.description} name={course.name} image={course.image} updated_date={course.updated_date}
+                   actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} edit={true}
                   />
               )
           )
           }
         </div>
       </div>
-    </TabsWrapper>
+    </UserTabsWrapper>
     
   )
 }
 
-const TabsWrapper = styled.div`
+const UserTabsWrapper = styled.div`
   .tabs{
     margin-top: 16px;
 
@@ -70,4 +89,4 @@ const TabsWrapper = styled.div`
   }
 `;
 
-export default Tabs
+export default MyProfileTabs

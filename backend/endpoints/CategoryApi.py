@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
 
 from factories_implementation.CategoryFactory import create_category
-from stores_implementation.CategoryStore import find_all_categories, add_category, delete_category, find_category_by_id
+from stores_implementation.CategoryStore import find_all_categories, add_category, delete_category, find_category_by_id, \
+    find_category_by_course_id
 from mappers.CategoryMapper import category_entity_to_model
 
 category_ns = Namespace('category', description="A namespace for Category")
@@ -11,7 +12,7 @@ category_ns = Namespace('category', description="A namespace for Category")
 courses_list = category_ns.model(
     "Courses",
     {
-        "course_id": fields.Integer(required=True),
+        "id": fields.Integer(required=True),
         "name": fields.String()
     }
 )
@@ -20,7 +21,8 @@ category_model_request = category_ns.model(
     "Category",
     {
         "id": fields.Integer(readOnly=True),
-        "name": fields.String(required=True)
+        "name": fields.String(required=True),
+        "courses": fields.List(fields.Nested(courses_list), readonly=True)
     }
 )
 
@@ -63,3 +65,11 @@ class CategoryResource(Resource):
             delete_category(category_to_delete)
             return jsonify({"message": f"Category id: {id} deleted."})
         return jsonify({"message": f"Category id: {id} does not exist."})
+
+@category_ns.route('/categoryCourse/<int:id>')
+class CategoryByCourseIdResource(Resource):
+    @category_ns.marshal_with(category_model_request)
+    def get(self, id):
+        """Get a category by course id"""
+        category_model = find_category_by_course_id(id)
+        return category_model

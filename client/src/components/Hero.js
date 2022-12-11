@@ -7,8 +7,8 @@ const Hero = () => {
         <HeroWrapper className="bg-black">
             <div className="container h-100 flex">
                 <div className="hero-content">
-                    <h1> Courses</h1>
-                    <p> Courses </p>
+                    <h1> Skills for tomorrow.</h1>
+                    <p>  Start learning with us. Learning that comes to you. </p>
                 </div>
             </div>
         </HeroWrapper>

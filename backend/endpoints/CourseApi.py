@@ -5,17 +5,25 @@ from flask_restx import Resource, Namespace, fields
 from factories_implementation.CourseFactory import create_course
 from mappers.CourseMapper import course_entity_to_model
 from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course, \
-    update_course, find_courses_by_owner_id
+    update_course, find_courses_by_owner_id, find_courses_by_logged_user
 
 course_ns = Namespace('course', description="A namespace for Course")
 
 tutorials_list = course_ns.model(
     "Tutorials",
     {
-        "id": fields.Integer(required=True)
+        "id": fields.Integer(required=True),
+        "title": fields.String(),
     }
 )
 
+topics_list = course_ns.model(
+    "Topics",
+    {
+        "id": fields.Integer(required=True),
+        "title": fields.String()
+    }
+)
 course_model_request = course_ns.model(
     "Course",
     {
@@ -23,6 +31,14 @@ course_model_request = course_ns.model(
         "name": fields.String(),
         "description": fields.String(),
         "owner": fields.Integer(),
+        "image": fields.String(),
+        "updated_date": fields.String(),
+        "actual_price": fields.Float(),
+        "discounted_price": fields.Float(),
+        "is_free": fields.Boolean(),
+        "language": fields.String(),
+        "category_id": fields.Integer(),
+        "what_you_will_learn": fields.List(fields.Nested(topics_list), readonly=True),
         "tutorials": fields.List(fields.Nested(tutorials_list), readonly=True)
     }
 )
@@ -83,11 +99,20 @@ class CourseResource(Resource):
         return jsonify({"message": f"Course id: {id} does not exist."})
 
 
-@course_ns.route('/courses-owner')
+@course_ns.route('/courses-owner/<int:id>')
 class CoursesOwnerResource(Resource):
     @course_ns.marshal_list_with(course_model_request)
-    @jwt_required()
-    def get(self):
+    def get(self, id):
         """Get courses by owner id"""
-        courses = find_courses_by_owner_id()
+        courses = find_courses_by_owner_id(id)
         return courses if courses else []
+
+@course_ns.route('/my-courses')
+class CoursesOwnerResource(Resource):
+    @jwt_required()
+    @course_ns.marshal_list_with(course_model_request)
+    def get(self):
+        """Get logged user courses """
+        courses = find_courses_by_logged_user()
+        return courses if courses else []
+

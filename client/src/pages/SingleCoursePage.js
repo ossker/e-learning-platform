@@ -9,23 +9,50 @@ import {RiClosedCaptioningFill} from "react-icons/ri";
 import {BiCheck} from "react-icons/bi";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
+import { useCourses } from '../context/courses_context';
+import { useCategories } from '../context/categories_context';
+import { useUsers } from '../context/users_context';
 
 const SingleCoursePage = () => {
-    const [course, setCourse] = useState();
     const {id} = useParams();
+    const [category, setCategory] = useState()
+    const [user, setUser] = useState()
+    const [course, setCourse] = useState()
+
     useEffect(
-        ()=>{
-            fetch(`/course/course/${id}`)
-            .then(res=>res.json())
-            .then(data=>{
-                setCourse(data)
-            })
-            .catch(err=>console.log(err))
+      ()=>{
+          fetch(`/category/categoryCourse/${id}`)
+          .then(res=>res.json())
+          .then(data=>{
+              setCategory(data)
+          })
+          .catch(err=>console.log(err))
+      },[]
+  );
+
+    useEffect(
+      ()=>{
+          fetch(`/auth/userCourse/${id}`)
+          .then(res=>res.json())
+          .then(data=>{
+              setUser(data)
+          })
+          .catch(err=>console.log(err))
+      },[]
+  );
+
+  useEffect(
+    ()=>{
+        fetch(`/course/course/${id}`)
+        .then(res=>res.json())
+        .then(data=>{
+            setCourse(data)
+        })
+        .catch(err=>console.log(err))
     },[]
 );
+  
 
-    console.log("course in single")
-    console.log(course)
   return (
     <SingleCourseWrapper>
       <div className='course-intro mx-auto grid'>
@@ -33,7 +60,7 @@ const SingleCoursePage = () => {
           <img src = {course_images.image} alt = {course?.name} />
         </div>
         <div className='course-details'>
-          <div className='course-category bg-white text-dark text-capitalize fw-6 fs-12 d-inline-block'>CATEGORY</div>
+          <div className='course-category bg-white text-dark text-capitalize fw-6 fs-12 d-inline-block'>{category?.name}</div>
           <div className='course-head'>
             <h5>{course?.name}</h5>
           </div>
@@ -48,27 +75,28 @@ const SingleCoursePage = () => {
 
             <ul className='course-info'>
               <li>
-                <span className='fs-14'>Created by <span className='fw-6 opacity-08'>{course?.owner}</span></span>
+                <span className='fs-14'>Created by <span className='fw-6 opacity-08'><Link to = {`/users/${id}`}>{user?.username}</Link></span></span>
               </li>
               <li className='flex'>
                 <span><MdInfo /></span>
-                <span className='fs-14 course-info-txt fw-5'>Last updated TEST</span>
+                <span className='fs-14 course-info-txt fw-5'>Last updated {course?.updated_date}</span>
               </li>
               <li className='flex'>
                 <span><TbWorld /></span>
-                <span className='fs-14 course-info-txt fw-5'>TEST</span>
+                <span className='fs-14 course-info-txt fw-5'>{course?.language}</span>
               </li>
               <li className='flex'>
                 <span><RiClosedCaptioningFill /></span>
-                <span className='fs-14 course-info-txt fw-5'>TEST</span>
+                <span className='fs-14 course-info-txt fw-5'>ilość godzin</span>
               </li>
             </ul>
           </div>
 
           <div className='course-foot'>
             <div className='course-price'>
-              <span className='new-price fs-26 fw-8'>100</span>
-              <span className='old-price fs-26 fw-6'>50</span>
+              {!course?.is_free?<div><span className='new-price fs-26 fw-8'>{course?.discounted_price}</span>
+              <span className='old-price fs-26 fw-6'>{course?.actual_price}</span></div>:<span className='free-price fs-26 fw-8'>Free</span>}
+              
             </div>
           </div>
 
@@ -85,7 +113,14 @@ const SingleCoursePage = () => {
           <div className='course-sc-title'>What you'll learn</div>
           <ul className='course-learn-list grid'>
             {
-              <div>TEST</div>
+              course?.what_you_will_learn && course?.what_you_will_learn.map((learnItem, idx) => {
+                return (
+                  <li key = {idx}>
+                    <span><BiCheck /></span>
+                    <span className='fs-14 fw-5 opacity-09'>{learnItem.title}</span>
+                  </li>
+                )
+              })
             }
           </ul>
         </div>
@@ -94,7 +129,13 @@ const SingleCoursePage = () => {
           <div className='course-sc-title'>Course content</div>
           <ul className='course-content-list'>
             {
-              <div>TEST</div>
+              course?.tutorials && course?.tutorials.map((contentItem, idx) => {
+                return (
+                  <li key = {idx}>
+                    <span>{contentItem.title}</span>
+                  </li>
+                )
+              })
             }
           </ul>
         </div>
@@ -167,6 +208,11 @@ const SingleCourseWrapper = styled.div`
       .old-price{
         color: #eceb98;
         text-decoration: line-through;
+        margin-left: 10px;
+      }
+
+      .free-price{
+        color: #eceb98;
         margin-left: 10px;
       }
     }
