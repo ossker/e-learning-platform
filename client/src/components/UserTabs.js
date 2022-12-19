@@ -12,6 +12,7 @@ const UserTabs = (id) => {
         then(data => data.json()).
         then(data => setCourses(data));
       }, [])
+      
   return (
     <UserTabsWrapper>
       <div className='tabs'>
@@ -19,7 +20,7 @@ const UserTabs = (id) => {
           {
             courses?.map(
               (course, index)=>(
-                  <Course key={index} id={course.id} description={course.description} name={course.name} image={course.image} updated_date={course.updated_date}
+                  <Course key={index} id={course.id} description={course.description} name={course.name} image={course.course_image} updated_date={course.updated_date}
                    actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} update={false} 
                   />
               )
@@ -53,6 +54,7 @@ const UserTabsWrapper = styled.div`
 
     .tabs-body{
       margin-top: 32px;
+      
     }
 
     @media screen and (min-width: 600px){

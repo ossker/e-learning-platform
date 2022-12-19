@@ -57,7 +57,7 @@ const SingleCoursePage = () => {
     <SingleCourseWrapper>
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
-          <img src = {course?.course_image? course?.course_image : course_images.image} alt = {course?.name} />
+          <img src = {course?.course_image? course?.course_image : course_images.image} alt = {course?.name} className="img"/>
         </div>
         <div className='course-details'>
           <div className='course-category bg-white text-dark text-capitalize fw-6 fs-12 d-inline-block'>{category?.name}</div>
@@ -75,7 +75,7 @@ const SingleCoursePage = () => {
 
             <ul className='course-info'>
               <li>
-                <span className='fs-14'>Created by <span className='fw-6 opacity-08'><Link to = {`/users/${id}`}>{user?.username}</Link></span></span>
+                <span className='fs-14'>Created by <span className='fw-6 opacity-08'><Link to = {`/users/${user?.id}`}>{user?.username}</Link></span></span>
               </li>
               <li className='flex'>
                 <span><MdInfo /></span>
@@ -148,6 +148,10 @@ const SingleCourseWrapper = styled.div`
   background: var(--clr-dark);
   color: var(--clr-white);
   
+  .img{
+    margin-top: 10%;
+    min-width: 600px;
+  }
   .course-intro{
     padding: 40px 16px;
     max-width: 992px;

@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from "styled-components";
 import StarRating from '../components/StarRating';
-import {MdConstruction, MdInfo} from "react-icons/md";
+import {MdConstruction, MdInfo, MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
 import {TbWorld} from "react-icons/tb";
 import {FaShoppingCart} from "react-icons/fa";
 import {RiClosedCaptioningFill, RiAddCircleFill, RiFolderUploadFill} from "react-icons/ri";
@@ -20,7 +20,8 @@ const AddCoursePage = () => {
   const history = useHistory();
   const [logged]=useAuth();
   
-  const [image, setImage] = useState('')
+  const [imageName, setImageName] = useState('')
+  const [imageError, setImageError] = useState(false)
 
   const createCourse = (data) => {
     console.log("DATA W ADD COURSE PAGE")
@@ -44,8 +45,6 @@ const AddCoursePage = () => {
       reset()
     })
     .catch(err => console.log(err))
-
-    console.log(image)
   }
 
   
@@ -60,23 +59,38 @@ const AddCoursePage = () => {
 
   const uploadFile = async (e) => {
     const file = e.target.files[0];
-    if (file != null) {
-      convertToBase64(file, (result) => {
-        console.log(result.toString())
-        setValue("course_image", result.toString());
-      });
-      
-    }
+    console.log(file)
     
+    console.log(file.name)
+    if (file != null) {
+      var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      if(!allowedExtensions.exec(file.name)){ 
+        setImageName("")
+        setImageError(true)
+        setValue("course_image", "");
+      }
+      else{
+        convertToBase64(file, (result) => {
+          setImageError(false)
+          setImageName(file.name)
+          setValue("course_image", result.toString());
+        });
+      }
+    }
   };
-
+  const learnSection = useRef(null);
+  const goToSection = (ref) => {
+    window.scrollTo({
+      top: ref.current.offsetTop,
+      behavior: "smooth",
+  });
+  }
 
   return (
     <SingleCourseWrapper>
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
-          {image? <img src={image}/>: null}
-          <img src={course_images.addcourse}/>
+          <img src={course_images.addcourse} className="img"/>
         </div>
         <div className='course-details mt-4'>
           <SelectWrapper>
@@ -94,15 +108,18 @@ const AddCoursePage = () => {
                   }
               </select>
             </div>
+            {errors.category && errors.category?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Category is required.</p></div>}
           </SelectWrapper>
           <div className='course-head'>
             <InputWrapper>
               <div className="form__group field">
                 <input type="text" className="form__field" placeholder="Name of course" name="name" id='name' required 
-                {...register("name")}
+                {...register("name", { required: true })}
                 />
                 <label htmlFor="name" className="form__label">Name of course</label>
               </div>
+              {errors.name && errors.name?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Name is required.</p></div>}
+
 
               <div className="form__group field">
                 <input type="text" className="form__field" placeholder="Description" name="description" id='description' required 
@@ -110,6 +127,8 @@ const AddCoursePage = () => {
                 />
                 <label htmlFor="description" className="form__label">Description</label>
               </div>
+              {errors.description && errors.description?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Description is required.</p></div>}
+
 
               <div className="form__group field">
                 <input type="text" className="form__field" placeholder="Language" name="language" id='language' required 
@@ -117,26 +136,32 @@ const AddCoursePage = () => {
                 />
                 <label htmlFor="language" className="form__label">Language</label>
               </div>
+              {errors.language && errors.language?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Language is required.</p></div>}
+
               <UploadWrapper>
-                <span className="btn btn btn-outline-light btn-file mt-5">
-                  Upload course image 
+                <span className="btn btn-outline-light btn-file mt-5">
+                  {imageName? <div style={{ "font-weight":"bold"}}>{imageName}</div>: "Upload course image" }
                   <input type="file" name="uploaded-file" onChange={uploadFile}/>
                   <input type="hidden"
                       {...register("course_image", { required: true })}
                   />
+                  
                 </span>
+                {imageName?<MdOutlineCheckCircleOutline className='checked-icon'/>: null}
+                {imageError?<MdRemoveCircleOutline className='checked-icon' style={{"color":"red"}}/>: null}
+                {errors.course_image && errors.course_image?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Image is required.</p></div>}
               </UploadWrapper>
             </InputWrapper>
           </div>
           <div className='course-btn'>
-            <Link to="#" className='add-to-cart-btn d-inline-block fw-7 bg-purple mt-4' onClick={handleSubmit(createCourse)}>
+            <Link to="#" className='add-to-cart-btn d-inline-block fw-7 bg-purple mt-4' onClick={()=> {handleSubmit(createCourse); goToSection(learnSection);}}>
               <RiAddCircleFill /> Add
             </Link>
           </div>
         </div>
       </div>
       <div className='course-full bg-white text-dark'>
-        <div className='course-learn mx-auto'>
+        <div className='course-learn mx-auto' ref={learnSection}>
           <div className='course-sc-title'>What you'll learn</div>
           <ul className='course-learn-list'>
             <BlackInputWrapper>
@@ -243,6 +268,24 @@ const BlackInputWrapper = styled.div`
 `
 
 const SelectWrapper = styled.div`
+.error-response{
+  display: flex;
+  color: red;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-left: 2rem;
+}
+.error-section{
+  margin-top: 0.5rem;
+  display: flex;
+  color: red;
+  height: 0.5rem;
+  font-weight: bold;
+}
+.error{
+  margin-left: 5px;
+  font-size: 1.1rem;
+}
 select {
   appearance: none;
   outline: 1;
@@ -289,14 +332,22 @@ select::-ms-expand {
 `
 
 const UploadWrapper = styled.div`
+.checked-icon{
+  margin-top: 40px;
+  margin-left: 10px;
+  font-size: 30px;
+  color: #34fa69;
+}
 .btn-file {
   position: relative;
   overflow: hidden;
+  min-width: 150px;
 }
 .btn-file input[type=file] {
   position: absolute;
   top: 0;
   right: 0;
+  
   min-width: 100%;
   min-height: 100%;
   font-size: 100px;
@@ -329,6 +380,10 @@ const InputWrapper = styled.div`
 .error{
     margin-left: 5px;
     font-size: 1.1rem;
+}
+.icon{
+  margin-top: -10px;
+  width: 1.7rem;
 }
 .form__group {
     position: relative;
@@ -394,7 +449,9 @@ const InputWrapper = styled.div`
 const SingleCourseWrapper = styled.div`
   background: var(--clr-dark);
   color: var(--clr-white);
-  
+  .img{
+    min-width: 500px;
+  }
   .course-intro{
     padding: 40px 16px;
     max-width: 992px;

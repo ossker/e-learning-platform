@@ -64,10 +64,14 @@ const CourseCard = styled.div`
   box-shadow: rgba(149, 157, 165, 0.1) 0px 8px 24px;
   display: flex;
   flex-direction: column;
+  .item-img{
+    margin-bottom: 14px;
+    padding-top: 20px;
+  }
   .item-body{
     margin: 14px 0;
     padding: 4px 18px;
-
+    margin-top: auto;
     .item-name{
       font-size: 15px;
       line-height: 1.4;
@@ -111,7 +115,7 @@ const CourseCard = styled.div`
   .item-btns{
     justify-self: flex-start;
     padding: 4px 8px 30px 18px;
-    margin-top: auto;
+    
 
     .item-btn{
       font-size: 15px;
