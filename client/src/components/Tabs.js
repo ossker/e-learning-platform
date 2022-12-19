@@ -5,6 +5,8 @@ import Course from "./Course";
 
 const Tabs = () => {
   const courses=useCourses();
+  console.log("NWWWW COURSES")
+  console.log(courses)
   return (
     <TabsWrapper>
       <div className='tabs'>
@@ -12,7 +14,7 @@ const Tabs = () => {
           {
             courses?.map(
               (course, index)=>(
-                  <Course key={index} id={course.id} description={course.description} name={course.name} owner={course.owner} image={course.image} updated_date={course.updated_date}
+                  <Course key={index} id={course.id} description={course.description} name={course.name} owner={course.owner} image={course.course_image} updated_date={course.updated_date}
                    actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} update={false} 
                   />
               )

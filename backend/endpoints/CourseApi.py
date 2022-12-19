@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
@@ -31,7 +33,7 @@ course_model_request = course_ns.model(
         "name": fields.String(),
         "description": fields.String(),
         "owner": fields.Integer(),
-        "image": fields.String(),
+        "course_image": fields.String(),
         "updated_date": fields.String(),
         "actual_price": fields.Float(),
         "discounted_price": fields.Float(),
@@ -42,9 +44,6 @@ course_model_request = course_ns.model(
         "tutorials": fields.List(fields.Nested(tutorials_list), readonly=True)
     }
 )
-
-
-
 
 
 @course_ns.route('/courses')
@@ -107,6 +106,7 @@ class CoursesOwnerResource(Resource):
         courses = find_courses_by_owner_id(id)
         return courses if courses else []
 
+
 @course_ns.route('/my-courses')
 class CoursesOwnerResource(Resource):
     @jwt_required()
@@ -116,3 +116,25 @@ class CoursesOwnerResource(Resource):
         courses = find_courses_by_logged_user()
         return courses if courses else []
 
+
+
+
+@course_ns.route('/course-image')
+class CourseImageResource(Resource):
+    def post(self):
+        """Handles the upload of a file."""
+        d = {}
+        file_content = ""
+        try:
+            file = request.files['course_image']
+            filename = file.filename
+            print(f"Uploading file {filename}")
+            file_bytes = file.read()
+            file_content = BytesIO(file_bytes).readlines()
+            print(file_content)
+            d['status'] = 1
+        except Exception as e:
+            print(f"Couldn't upload file {e}")
+            d['status'] = 0
+
+        return jsonify(d)

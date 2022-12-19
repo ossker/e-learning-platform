@@ -7,7 +7,7 @@ import { course_images } from "../utils/images";
 const Course = (props) => {
     
     const {id, description, name, owner, image, updated_date, actual_price, discounted_price, is_free, language, topics, edit} = props;
-  
+    
     const [imageDisplay, setImageDisplay] = useState('')
     const [price, setPrice] = useState(0)
     const [user, setUser] = useState('')
@@ -33,11 +33,11 @@ const Course = (props) => {
   return (
     <CourseCard>
       <div className='item-img'>
-        <img src = {course_images.image} alt = {name} />
+        <img src = {image? image : course_images.image} alt = {name} />
       </div>
       <div className='item-body'>
         <h5 className='item-name'>{name}</h5>
-        <span className='item-creator'><Link to = {`/users/${id}`}>{user.username}</Link></span>
+        <span className='item-creator'><Link to = {`/users/${owner}`}>{user.username}</Link></span>
         <div className='item-rating flex'>
           <span className='rating-star-val'>{4}</span>
           <StarRating rating_star = {4} />

@@ -57,7 +57,7 @@ const SingleCoursePage = () => {
     <SingleCourseWrapper>
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
-          <img src = {course_images.image} alt = {course?.name} />
+          <img src = {course?.course_image? course?.course_image : course_images.image} alt = {course?.name} />
         </div>
         <div className='course-details'>
           <div className='course-category bg-white text-dark text-capitalize fw-6 fs-12 d-inline-block'>{category?.name}</div>
