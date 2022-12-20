@@ -71,19 +71,19 @@ const UserTabsWrapper = styled.div`
       .tabs-body{
         display: grid;
         gap: 26px;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
       }
     }
 
     @media screen and (min-width: 992px){
       .tabs-body{
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media screen and (min-width: 1400px){
       .tabs-body{
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   }

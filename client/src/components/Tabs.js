@@ -2,26 +2,23 @@ import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
 import { useCourses } from '../context/courses_context';
 import Course from "./Course";
+import Pagination from './Pagination';
 
 const Tabs = () => {
   const courses=useCourses();
-  console.log("NWWWW COURSES")
-  console.log(courses)
   return (
     <TabsWrapper>
-      <div className='tabs'>
-        <div className='tabs-body'>
-          {
-            courses?.map(
-              (course, index)=>(
-                  <Course key={index} id={course.id} description={course.description} name={course.name} owner={course.owner} image={course.course_image} updated_date={course.updated_date}
-                   actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} update={false} 
-                  />
-              )
-          )
-          }
-        </div>
-      </div>
+        {courses?.length > 0 ? (
+          
+            <Pagination
+              data={courses}
+              pageLimit={5}
+              dataLimit={4}
+            />
+          
+            ) : (
+            <h1>No Courses to display</h1>
+        )}
     </TabsWrapper>
     
   )
