@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
 import { useCourses } from '../context/courses_context';
 import Course from "./Course";
+import MyProfilePagination from './MyProfilePagination';
 
 const MyProfileTabs = () => {
     const [courses, setCourses] = useState([]);
@@ -26,19 +27,16 @@ const MyProfileTabs = () => {
     );
   return (
     <UserTabsWrapper>
-      <div className='tabs'>
-        <div className='tabs-body'>
-          {
-            courses?.map(
-              (course, index)=>(
-                  <Course key={index} id={course.id} description={course.description} name={course.name} image={course.image} updated_date={course.updated_date}
-                   actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} edit={true}
-                  />
-              )
-          )
-          }
-        </div>
-      </div>
+      {courses?.length > 0 ? (
+          <MyProfilePagination
+            data={courses}
+            pageLimit={5}
+            dataLimit={3}
+          />
+        
+          ) : (
+          <h1>No Courses to display</h1>
+      )}
     </UserTabsWrapper>
     
   )
