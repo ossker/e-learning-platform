@@ -11,8 +11,10 @@ import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
 import Hero from '../components/Hero';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../auth';
+import { logout, useAuth } from '../auth';
 import { useCategories } from '../context/categories_context';
+import TokenExpiredModal from '../components/TokenExpiredModal';
+import ErrorModal from '../components/ErrorModal';
 
 const AddCoursePage = () => {
   const categories = useCategories();
@@ -22,12 +24,10 @@ const AddCoursePage = () => {
   
   const [imageName, setImageName] = useState('')
   const [imageError, setImageError] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [showModalError, setShowModalError] = useState(false);
 
   const createCourse = (data) => {
-    console.log("DATA W ADD COURSE PAGE")
-    console.log(data)
-
-    
     const token = localStorage.getItem('REACT_TOKEN_AUTH_KEY');
     
     const requestOptions = {
@@ -38,16 +38,30 @@ const AddCoursePage = () => {
       },
       body: JSON.stringify(data)
     }
-
+    
     fetch('/course/courses', requestOptions)
-    .then(res => res.json())
+    .then(async res => {
+      let response = await res.json()
+      if(response.msg == "Token has expired"){
+        logout();
+        setShowModal(true);
+      }
+      else if(response.status == 1){
+        reset();
+        goToSection(learnSection);
+      }
+      else{
+        setShowModalError(true)
+      }
+          
+    })
     .then(data => {
-      reset()
     })
     .catch(err => console.log(err))
+    
+    
   }
 
-  
   
   const convertToBase64 = (file, cb) => {
       const reader = new FileReader();
@@ -88,6 +102,9 @@ const AddCoursePage = () => {
 
   return (
     <SingleCourseWrapper>
+      {showModal?<TokenExpiredModal/>:null}
+      {showModalError?<ErrorModal/>:null}
+      <form>
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
           <img src={course_images.addcourse} className="img"/>
@@ -154,7 +171,7 @@ const AddCoursePage = () => {
             </InputWrapper>
           </div>
           <div className='course-btn'>
-            <Link to="#" className='add-to-cart-btn d-inline-block fw-7 bg-purple mt-4' onClick={()=> {handleSubmit(createCourse); goToSection(learnSection);}}>
+            <Link to="#" className='add-to-cart-btn d-inline-block fw-7 bg-purple mt-4' onClick={handleSubmit(createCourse)}>
               <RiAddCircleFill /> Add
             </Link>
           </div>
@@ -183,6 +200,7 @@ const AddCoursePage = () => {
           </ul>
         </div>
       </div>
+      </form>
     </SingleCourseWrapper>
   )
 }

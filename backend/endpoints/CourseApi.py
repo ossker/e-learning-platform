@@ -56,7 +56,6 @@ class CoursesResource(Resource):
         return courses
 
     @course_ns.expect(course_model_request)
-    @course_ns.marshal_with(course_model_request)
     @jwt_required()
     def post(self):
         """Create a new course"""
@@ -65,9 +64,9 @@ class CoursesResource(Resource):
         if new_course_entity:
             new_course = course_entity_to_model(new_course_entity)
             add_course(new_course)
-            return new_course
+            return {"status": 1}
         else:
-            return []
+            return {"status": 0}
 
 
 @course_ns.route('/course/<int:id>')
