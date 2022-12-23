@@ -29,7 +29,6 @@ class TopicsResource(Resource):
         # return topics
 
     @topic_ns.expect(topic_model_request)
-    @topic_ns.marshal_with(topic_model_request)
     @jwt_required()
     def post(self):
         """Create a new topic"""

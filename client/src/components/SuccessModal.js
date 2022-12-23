@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 
-const SuccessModal = () => {
+const SuccessModal = (content) => {
     const [show, setShow] = useState(true);
     const handleClose = () => setShow(false);
     return (
@@ -21,7 +21,9 @@ const SuccessModal = () => {
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <h3 className='content'>course added successfully.</h3>
+                            <h3 className='content'>
+                                {content.content}
+                            </h3>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="outline-dark" className='button' onClick={handleClose}>

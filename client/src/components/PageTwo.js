@@ -7,22 +7,20 @@ import styled from 'styled-components';
 import SuccessModal from './SuccessModal';
 import { logout, useAuth } from '../auth';
 import { useForm } from 'react-hook-form';
-
+import AnimatedCheckmark, { MODES } from 'react-animated-checkmark'
+import TokenExpiredModal from './TokenExpiredModal';
+import ErrorModal from './ErrorModal';
 
 const PageTwo = ({ onButtonClick, courseName }) => {
     const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();
     const [showModalCourseAdded, setShowModalCourseAdded] = useState(true);
-    const [course, setCourse] = useState(true);
-    const [showModal, setShowModal] = useState(false);
+    const [showModalTokenExpired, setShowModalTokenExpired] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
-
     useEffect(
         ()=>{
             fetch(`/course/course-by-name/${courseName}`)
             .then(res=>res.json())
             .then(data=>{
-                console.log("KURS PO NAZWIE")
-                console.log(data.id)
                 setValue("course_id", data.id);
             })
             .catch(err=>console.log(err))
@@ -46,10 +44,12 @@ const PageTwo = ({ onButtonClick, courseName }) => {
           let response = await res.json()
           if(response.msg == "Token has expired"){
             logout();
-            setShowModal(true);
+            setShowModalTokenExpired(true);
           }
           else if(response.status == 1){
-            onButtonClick("pagetwo", response.course_name)
+            setValue("title", "");
+            setMode(MODES.SUCCESS)
+            loading()
           }
           else{
             setShowModalError(true)
@@ -60,17 +60,28 @@ const PageTwo = ({ onButtonClick, courseName }) => {
         })
         .catch(err => console.log(err))
       }
+      const [mode, setMode] = useState(MODES.LOADING)
 
+      function loading(){
+        setTimeout(function(){ 
+            setMode(MODES.LOADING)
+        }, 3000);
+    }
+      
+      
     return(
         <PageWrapper>
-            {showModalCourseAdded?<SuccessModal/>:null}
+            {showModalCourseAdded?<SuccessModal content="course added successfully."/>:null}
+            {showModalTokenExpired?<TokenExpiredModal/>:null}
+            {showModalError?<ErrorModal/>:null}
             <div className='course-full text-light'>
                 <div className='course-learn mx-auto'>
                     <div className='course-sc-title'>What you'll learn</div>
+                    
                     <ul className='course-learn-list'>
                         <BlackInputWrapper>
                             <div className="form__group field">
-                                <input type="text" className="form__field" placeholder="Learn Item" name="learnItem" id='learnItem' required 
+                                <input type="text" className="form__field" placeholder="Learn Item" name="learnItem" id='learnItem' required
                                 {...register("title", { required: true })}
                                 />
                                 <label htmlFor="learnItem" className="form__label">Learn Item</label>
@@ -83,14 +94,15 @@ const PageTwo = ({ onButtonClick, courseName }) => {
                     </ul>
                     <div className='course-btn'>
                         <Link to="#" className='add-to-cart-btn d-inline-block fw-7 bg-purple mt-4' onClick={handleSubmit(createTopic)}>
-                            <RiAddCircleFill /> Add
+                            <RiAddCircleFill /> Add 
                         </Link>
+                        <p className='checkMark'><AnimatedCheckmark mode={mode} baseColor='#ab12e3' collapseFactor={1} size={50}/></p>
                     </div>
                 </div>
                 <div className='next mx-auto'>
                     <div className='course-btn'>
                             <Link to='#' className='next-btn d-inline-block fw-7 bg-purple mt-4' onClick={()=>{onButtonClick("pagethree")}}>
-                                Next<FaArrowRight/>
+                                Next <FaArrowRight/>
                             </Link>
                     </div>
                 </div>
@@ -135,7 +147,7 @@ const BlackInputWrapper = styled.div`
   border-bottom: 2px solid #9b9b9b;
   outline: 0;
   font-size: 1.3rem;
-  color: black;
+  color: white;
   padding: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
@@ -153,7 +165,7 @@ const BlackInputWrapper = styled.div`
 
 .form__label {
   position: absolute;
-  top: 10px;
+  top: 0px;
   display: block;
   transition: 0.2s;
   font-size: 1rem;
@@ -167,12 +179,12 @@ const BlackInputWrapper = styled.div`
     display: block;
     transition: 0.2s;
     font-size: 1rem;
-    color: black;
+    color: white;
        
   }
   padding-bottom: 6px; 
   border-width: 3px;
-  border-image: linear-gradient(to right, black, #9b9b9b);
+  border-image: linear-gradient(to right, white, #9b9b9b);
   border-image-slice: 1;
 }
 
@@ -181,6 +193,7 @@ const BlackInputWrapper = styled.div`
 }
 `
 const PageWrapper = styled.div`
+
 .next{
     max-width: 992px;
     padding: 0px 28px 22px 28px;
@@ -194,8 +207,13 @@ const PageWrapper = styled.div`
     }
       
 }
+.checkMark{
+  display:table-cell
+}
 .course-btn{
+  display:inline-table;
     .add-to-cart-btn{
+      margin-right: 10px;
       padding: 12px 28px;
       span{
         margin-left: 12px;
