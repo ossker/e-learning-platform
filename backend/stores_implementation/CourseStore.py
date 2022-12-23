@@ -33,6 +33,9 @@ def find_course_by_id(course_id) -> CourseModel:
     course_model = CourseModel.query.filter_by(id=course_id).first()
     return course_model
 
+def find_course_by_name(course_name) -> CourseModel:
+    course_model = CourseModel.query.filter_by(name=course_name).first()
+    return course_model
 
 def delete_course(course) -> None:
     db.session.delete(course)
