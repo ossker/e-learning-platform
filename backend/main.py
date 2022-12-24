@@ -9,7 +9,7 @@ from endpoints import (
     auth_ns,
     category_ns,
     tutorial_ns,
-    course_ns,
+    course_ns, topic_ns,
 )
 from models import (
     CourseModel,
@@ -39,6 +39,7 @@ def create_app(config):
     api.add_namespace(course_ns)
     api.add_namespace(category_ns)
     api.add_namespace(tutorial_ns)
+    api.add_namespace(topic_ns)
 
 
     @app.shell_context_processor

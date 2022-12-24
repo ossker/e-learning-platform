@@ -2,7 +2,9 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
 
-from stores_implementation.TutorialStore import find_tutorials_by_course_id
+from factories_implementation.TutorialFactory import create_tutorial
+from mappers.TutorialMapper import tutorial_entity_to_model
+from stores_implementation.TutorialStore import find_tutorials_by_course_id, add_tutorial, find_all_tutorials
 
 tutorial_ns = Namespace('tutorial', description="A namespace for Tutorial")
 
@@ -33,55 +35,22 @@ class TutorialsResource(Resource):
     @tutorial_ns.marshal_list_with(tutorial_model_request)
     def get(self):
         """Get all tutorials"""
-        # tutorials = TutorialStore.find_all()
-        # return tutorials
-        pass
+        tutorials = find_all_tutorials()
+        return tutorials
+
 
     @tutorial_ns.expect(tutorial_model_request)
-    @tutorial_ns.marshal_with(tutorial_model_request)
     @jwt_required()
     def post(self):
         """Create a new tutorial"""
-        pass
-        # data = request.get_json()
-        # new_tutorial = TutorialFactory.create_tutorial(data)
-        # TutorialStore.add(new_tutorial)
-        """data = request.get_json()
-               title = data.get('title')
-               video = data.get('video')
-               content = data.get('content')
-               course_id = data.get('course_id')
-               course_model = CourseModel.query.filter_by(id=course_id).first()
-
-               tutorials = TutorialStore.find_by_course_id(course_model.id)
-
-               course = Course(
-                   name=course_model.name,
-                   user=course_model.owner,
-                   tutorials=tutorials,
-                   description=course_model.description
-               )
-
-               new_tutorial = Tutorial(
-                   title=title,
-                   video=video,
-                   content=content,
-                   course=course
-               )
-
-               tutorial_model = TutorialModel(
-                   title=new_tutorial.title,
-                   video=new_tutorial.video,
-                   content=new_tutorial.content,
-                   course_id=new_tutorial.course.get_id()
-               )
-
-               db.session.add(tutorial_model)
-               db.session.commit()
-
-               """
-        # return new_tutorial, 201
-        pass
+        data = request.get_json()
+        new_tutorial_entity = create_tutorial(data)
+        if new_tutorial_entity:
+            new_tutorial = tutorial_entity_to_model(new_tutorial_entity)
+            add_tutorial(new_tutorial)
+            return {"status": 1}
+        else:
+            return {"status": 0}
 
 
 @tutorial_ns.route('/tutorial/<int:id>')

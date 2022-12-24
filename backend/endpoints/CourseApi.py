@@ -7,7 +7,7 @@ from flask_restx import Resource, Namespace, fields
 from factories_implementation.CourseFactory import create_course
 from mappers.CourseMapper import course_entity_to_model
 from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course, \
-    update_course, find_courses_by_owner_id, find_courses_by_logged_user
+    update_course, find_courses_by_owner_id, find_courses_by_logged_user, find_course_by_name
 
 course_ns = Namespace('course', description="A namespace for Course")
 
@@ -64,7 +64,7 @@ class CoursesResource(Resource):
         if new_course_entity:
             new_course = course_entity_to_model(new_course_entity)
             add_course(new_course)
-            return {"status": 1}
+            return {"status": 1, "course_name": new_course.name}
         else:
             return {"status": 0}
 
@@ -105,6 +105,14 @@ class CoursesOwnerResource(Resource):
         courses = find_courses_by_owner_id(id)
         return courses if courses else []
 
+
+@course_ns.route('/course-by-name/<string:name>')
+class CourseResource(Resource):
+    @course_ns.marshal_with(course_model_request)
+    def get(self, name):
+        """Get a course by name"""
+        course_model = find_course_by_name(name)
+        return course_model if course_model else []
 
 @course_ns.route('/my-courses')
 class CoursesOwnerResource(Resource):
