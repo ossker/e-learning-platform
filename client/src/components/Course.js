@@ -7,7 +7,7 @@ import { course_images } from "../utils/images";
 const Course = (props) => {
     
     const {id, description, name, owner, image, updated_date, actual_price, discounted_price, is_free, language, topics, edit} = props;
-  
+    
     const [imageDisplay, setImageDisplay] = useState('')
     const [price, setPrice] = useState(0)
     const [user, setUser] = useState('')
@@ -33,11 +33,11 @@ const Course = (props) => {
   return (
     <CourseCard>
       <div className='item-img'>
-        <img src = {course_images.image} alt = {name} />
+        <img src = {image? image : course_images.image} alt = {name} />
       </div>
       <div className='item-body'>
         <h5 className='item-name'>{name}</h5>
-        <span className='item-creator'><Link to = {`/users/${id}`}>{user.username}</Link></span>
+        <span className='item-creator'><Link to = {`/users/${owner}`}>{user.username}</Link></span>
         <div className='item-rating flex'>
           <span className='rating-star-val'>{4}</span>
           <StarRating rating_star = {4} />
@@ -64,10 +64,14 @@ const CourseCard = styled.div`
   box-shadow: rgba(149, 157, 165, 0.1) 0px 8px 24px;
   display: flex;
   flex-direction: column;
+  .item-img{
+    margin-bottom: 14px;
+    padding-top: 20px;
+  }
   .item-body{
     margin: 14px 0;
     padding: 4px 18px;
-
+    margin-top: auto;
     .item-name{
       font-size: 15px;
       line-height: 1.4;
@@ -111,7 +115,7 @@ const CourseCard = styled.div`
   .item-btns{
     justify-self: flex-start;
     padding: 4px 8px 30px 18px;
-    margin-top: auto;
+    
 
     .item-btn{
       font-size: 15px;

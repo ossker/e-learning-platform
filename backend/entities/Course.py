@@ -14,6 +14,8 @@ class Course:
     discounted_price: Optional[float]
     is_free: bool
     language: str
+    category: Any
+    course_image: Optional[str]
     tutorials: Optional[List]
 
     def __init__(
@@ -23,6 +25,8 @@ class Course:
         updated_date: str,
         is_free: bool,
         language: str,
+        category: Any,
+        course_image: Optional[str] = None,
         actual_price: Optional[float] = None,
         discounted_price: Optional[float] = None,
         tutorials: Optional[List] = None,
@@ -37,6 +41,8 @@ class Course:
         self.discounted_price = discounted_price
         self.tutorials = tutorials
         self.description = description
+        self.course_image = course_image
+        self.category = category
 
 
 

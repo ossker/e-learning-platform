@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, Namespace, fields
@@ -31,7 +33,7 @@ course_model_request = course_ns.model(
         "name": fields.String(),
         "description": fields.String(),
         "owner": fields.Integer(),
-        "image": fields.String(),
+        "course_image": fields.String(),
         "updated_date": fields.String(),
         "actual_price": fields.Float(),
         "discounted_price": fields.Float(),
@@ -44,9 +46,6 @@ course_model_request = course_ns.model(
 )
 
 
-
-
-
 @course_ns.route('/courses')
 class CoursesResource(Resource):
 
@@ -57,7 +56,6 @@ class CoursesResource(Resource):
         return courses
 
     @course_ns.expect(course_model_request)
-    @course_ns.marshal_with(course_model_request)
     @jwt_required()
     def post(self):
         """Create a new course"""
@@ -66,9 +64,9 @@ class CoursesResource(Resource):
         if new_course_entity:
             new_course = course_entity_to_model(new_course_entity)
             add_course(new_course)
-            return new_course
+            return {"status": 1}
         else:
-            return []
+            return {"status": 0}
 
 
 @course_ns.route('/course/<int:id>')
@@ -107,6 +105,7 @@ class CoursesOwnerResource(Resource):
         courses = find_courses_by_owner_id(id)
         return courses if courses else []
 
+
 @course_ns.route('/my-courses')
 class CoursesOwnerResource(Resource):
     @jwt_required()
@@ -116,3 +115,25 @@ class CoursesOwnerResource(Resource):
         courses = find_courses_by_logged_user()
         return courses if courses else []
 
+
+
+
+@course_ns.route('/course-image')
+class CourseImageResource(Resource):
+    def post(self):
+        """Handles the upload of a file."""
+        d = {}
+        file_content = ""
+        try:
+            file = request.files['course_image']
+            filename = file.filename
+            print(f"Uploading file {filename}")
+            file_bytes = file.read()
+            file_content = BytesIO(file_bytes).readlines()
+            print(file_content)
+            d['status'] = 1
+        except Exception as e:
+            print(f"Couldn't upload file {e}")
+            d['status'] = 0
+
+        return jsonify(d)

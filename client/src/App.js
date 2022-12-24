@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
-import AddCoursePage from './components/AddCourse';
+import AddCoursePage from './pages/AddCoursePage';
 import UpdateCoursePage from './components/UpdateCourse';
 import SingleCoursePage from './pages/SingleCoursePage';
 import MyProfilePage from './pages/MyProfilePage';
