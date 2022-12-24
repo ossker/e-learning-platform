@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const AddCoursePage = () => {
   const [page, setPage] = useState("pageone");
-  const [courseName, setCourseName] = useState("pageone");
+  const [courseName, setCourseName] = useState();
   const nextPage = (page, course_name) => {
     setCourseName(course_name)
     setPage(page);
@@ -39,7 +39,7 @@ const AddCoursePage = () => {
         {
           pageone: <PageOne onButtonClick={nextPage} />,
           pagetwo: <PageTwo onButtonClick={nextPage} courseName={courseName}/>,
-          pagethree: <PageThree/>
+          pagethree: <PageThree courseName={courseName}/>
         }[page]
       }
     </BarWrapper>

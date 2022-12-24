@@ -22,7 +22,7 @@ const PageTwo = ({ onButtonClick, courseName }) => {
             .then(res=>res.json())
             .then(data=>{
                 setValue("course_id", data.id);
-            })
+            }) 
             .catch(err=>console.log(err))
         },[]
     );
@@ -65,7 +65,7 @@ const PageTwo = ({ onButtonClick, courseName }) => {
       function loading(){
         setTimeout(function(){ 
             setMode(MODES.LOADING)
-        }, 3000);
+        }, 2000);
     }
       
       
@@ -101,7 +101,7 @@ const PageTwo = ({ onButtonClick, courseName }) => {
                 </div>
                 <div className='next mx-auto'>
                     <div className='course-btn'>
-                            <Link to='#' className='next-btn d-inline-block fw-7 bg-purple mt-4' onClick={()=>{onButtonClick("pagethree")}}>
+                            <Link to='#' className='next-btn d-inline-block fw-7 bg-purple mt-4' onClick={()=>{onButtonClick("pagethree", courseName)}}>
                                 Next <FaArrowRight/>
                             </Link>
                     </div>

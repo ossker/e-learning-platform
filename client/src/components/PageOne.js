@@ -165,19 +165,6 @@ const PageOne = ({ onButtonClick }) => {
           </div>
         </div>
       </div>
-      <div className='course-full bg-white text-dark'>
-        
-
-        <div className='course-content mx-auto'>
-          <div className='course-sc-title'>Course content</div>
-          <ul className='course-content-list'>
-            {
-              "HEJ" 
-            }
-          </ul>
-        </div>
-        
-      </div>
       </form>
       
     </SingleCourseWrapper>
