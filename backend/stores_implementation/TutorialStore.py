@@ -1,5 +1,5 @@
 from typing import List
-
+from pytube import YouTube
 from exts import db
 from models.TutorialModel import TutorialModel
 
@@ -12,6 +12,31 @@ def find_all_tutorials() -> List[TutorialModel]:
     tutorial_models = TutorialModel.query.all()
     return tutorial_models
 
+
+def get_duration_of_tutorials_by_course_id(course_id) -> str:
+    tutorials_models = find_tutorials_by_course_id(course_id)
+    duration = _get_duration_of_tutorials(tutorials_models)
+    return duration
+
 def add_tutorial(tutorial_model: TutorialModel) -> None:
     db.session.add(tutorial_model)
     db.session.commit()
+
+
+def _get_duration_of_tutorials(tutorials_models) -> str:
+    seconds = 0
+    for tutorial in tutorials_models:
+        yt = YouTube(tutorial.video)
+        video_length = yt.length
+        seconds += video_length
+    hours = _convert_seconds_to_hours(seconds)
+    return hours
+
+
+def _convert_seconds_to_hours(seconds) -> str:
+    seconds = seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+    return "%d:%02d:%02d" % (hour, minutes, seconds)

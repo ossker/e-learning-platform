@@ -18,6 +18,7 @@ const SingleCoursePage = () => {
     const [category, setCategory] = useState()
     const [user, setUser] = useState()
     const [course, setCourse] = useState()
+    const [duration, setDuration] = useState()
 
     useEffect(
       ()=>{
@@ -29,6 +30,17 @@ const SingleCoursePage = () => {
           .catch(err=>console.log(err))
       },[]
   );
+
+  useEffect(
+    ()=>{
+        fetch(`/tutorial/duration-tutorials/${id}`)
+        .then(res=>res.json())
+        .then(data=>{
+            setDuration(data)
+        })
+        .catch(err=>console.log(err))
+    },[]
+);
 
     useEffect(
       ()=>{
@@ -87,7 +99,7 @@ const SingleCoursePage = () => {
               </li>
               <li className='flex'>
                 <span><RiClosedCaptioningFill /></span>
-                <span className='fs-14 course-info-txt fw-5'>ilość godzin</span>
+                <span className='fs-14 course-info-txt fw-5'>{duration}</span>
               </li>
             </ul>
           </div>
