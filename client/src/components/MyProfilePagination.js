@@ -6,7 +6,6 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 const MyProfilePagination = ({ data, title, pageLimit, dataLimit }) => {
     const [pages] = useState(Math.ceil(data.length / dataLimit));
     const [currentPage, setCurrentPage] = useState(1);
-    
     function goToNextPage() {
         setCurrentPage((page) => page + 1);
     }
@@ -41,7 +40,7 @@ const MyProfilePagination = ({ data, title, pageLimit, dataLimit }) => {
           <div className='tabs'>
             <div className='tabs-body' >
               {getPaginatedData().map((course, idx) => (
-                <Course key={idx} id={course.id} description={course.description} name={course.name} image={course.image} updated_date={course.updated_date}
+                <Course key={idx} id={course.id} owner={course.owner} description={course.description} name={course.name} image={course.course_image} updated_date={course.updated_date}
                 actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} edit={true}
                />
               ))}

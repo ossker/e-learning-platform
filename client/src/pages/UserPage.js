@@ -27,7 +27,7 @@ const UserPage = () => {
                 <div className="cols__container">
                     <div className="left__col">
                     <div className="img__container">
-                        <img src={user_images.default_user} alt={user?.username} />
+                      {user?.avatar? <img src={user?.avatar} alt={user?.username}/>:<img src={user_images.default_user} alt={user?.username}/>}
                         
                     </div>
                     <h2>{user?.username}</h2>

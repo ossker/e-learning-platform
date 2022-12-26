@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {Link, Redirect, useParams} from 'react-router-dom'
-import { useAuth } from '../auth'
 import Course from '../components/Course'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
@@ -12,14 +11,20 @@ import { course_images } from "../utils/images";
 import {BsLinkedin, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
 import UserCourseList from "../components/UserCourseList";
 import MyProfileCoursesList from '../components/MyProfileCoursesList'
-
+import { logout, useAuth } from '../auth';
+import TokenExpiredModal from '../components/TokenExpiredModal'
+import { RiContactsBookLine } from 'react-icons/ri'
+import {MdConstruction, MdInfo ,MdCancel, MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
 
 const LoggedInUser=(id)=>{
     const [courses, setCourses] = useState([]);
     const [user, setUser] = useState();
     const history = useHistory()
-    
-    
+    const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();
+    const [showModalTokenExpired, setShowModalTokenExpired] = useState(false);
+    const [showModalError, setShowModalError] = useState(false);
+    const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     const requestOptions ={
         method: 'GET',
@@ -34,14 +39,17 @@ const LoggedInUser=(id)=>{
             fetch('/course/my-courses', requestOptions)
             .then(res=>res.json())
             .then(data=>{
+              if(data.msg == "Token has expired"){
+                logout();
+                setShowModalTokenExpired(true);
+              }else{
                 setCourses(data)
+              }
             })
             .catch(err=>console.log(err))
         },[]
     );
 
-    console.log("actual courses")
-    console.log(courses)
 
     useEffect(
         ()=>{
@@ -53,17 +61,227 @@ const LoggedInUser=(id)=>{
             .catch(err=>console.log(err))
         },[]
     );
-    console.log("actual user")
+
     console.log(user)
+    const [show, setShow] = useState(false)
+    const [imageName, setImageName] = useState('')
+  const [imageError, setImageError] = useState(false)
+    const closeModal = () => {
+      setShow(false)
+  }
+
+  const showModal = () => {
+      setShow(true)
+      setValue("username", user?.username)
+      setValue("first_name", user?.first_name)
+      setValue("last_name", user?.last_name)
+      setValue("email", user?.email)
+      setValue("about_me", user?.about_me)
+      setValue("password", user?.password)
+      setValue("fb_link", user?.fb_link)
+      setValue("yt_link", user?.yt_link)
+      setValue("li_link", user?.li_link)
+      setValue("tw_link", user?.tw_link)
+      setValue("avatar", user?.avatar)
+  }
+
+  const convertToBase64 = (file, cb) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file)
+    reader.onload = function () {
+      cb(reader.result)
+    };
+}
+
+const uploadFile = async (e) => {
+  const file = e.target.files[0];
+  if (file != null) {
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if(!allowedExtensions.exec(file.name)){ 
+      setImageName("")
+      setImageError(true)
+      setValue("avatar", "");
+    }
+    else{
+      convertToBase64(file, (result) => {
+        setImageError(false)
+        setImageName(file.name)
+        setValue("avatar", result.toString());
+      });
+    }
+  }
+};
+
+  const editProfile = (data) => {
+    console.log(data)
+
+    const requestOptions={
+      method:'PUT',
+      headers:{
+          'content-type':'application/json',
+          'Authorization':`Bearer ${JSON.parse(token)}`
+      },
+      body:JSON.stringify(data)
+  }
+
+  fetch(`/auth/user/${user?.id}`, requestOptions)
+  .then(res=>res.json())
+  .then(data=>{
+      console.log(data)
+
+      const reload =window.location.reload()
+      reload() 
+  })
+  .catch(err=>console.log(err))
+    
+
+  }
+
     return(
         <UserPageWrapper>
+        {showModalTokenExpired?<TokenExpiredModal/>:null}
+          <EditProfileModalWrapper>
+            <Modal
+              size="lg"
+              show={show}
+              onHide={closeModal}
+              scrollable={true}
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  Update Profile
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <InputWrapper>
+                  <form className="mx-1 mx-md-4">
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field__disabled" placeholder="Username" name="username" id='username' disabled={true}
+                          {...register("username")}
+                        />
+                        <label htmlFor="username" className="form__label">Username</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field__disabled" placeholder="First name" name="first_name" id='first_name' disabled={true}
+                          {...register("first_name")}
+                        />
+                        <label htmlFor="first_name" className="form__label">First name</label>
+                      </div>
+                    </div> 
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field__disabled" placeholder="Last name" name="last_name" id='last_name' disabled={true}
+                          {...register("last_name")}
+                        />
+                        <label htmlFor="last_name" className="form__label">Last name</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field__disabled" placeholder="Email" name="email" id='email' disabled={true}
+                          {...register("email")}
+                        />
+                        <label htmlFor="email" className="form__label">Email</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field" placeholder="About me" name="about_me" id='about_me'
+                          {...register("about_me", {maxLength:1000})}
+                        />
+                        {errors.about_me && errors.about_me?.type ==="maxLength" && <div className="error-section"><MdReportGmailerrorred/> <p className="error">Too many characters.</p></div>}
+                        <label htmlFor="about_me" className="form__label">About me</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field" placeholder="Facebook" name="facebook" id='facebook'
+                          {...register("fb_link", {pattern: /^(?:(?:http|https):\/\/)?(?:www.)?facebook.com/})}
+                        />
+                        {errors.fb_link && errors.fb_link?.type ==="pattern" && <div className="error-section"><MdReportGmailerrorred/> <p className="error">Invalid facebook link.</p></div>}
+
+                        <label htmlFor="facebook" className="form__label">Facebook</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field" placeholder="Youtube" name="youtube" id='youtube'
+                          {...register("yt_link", {pattern: /^(?:(?:http|https):\/\/)?(?:www.)?youtube.com/})}
+                        />
+                        {errors.yt_link && errors.yt_link?.type ==="pattern" && <div className="error-section"><MdReportGmailerrorred/> <p className="error">Invalid youtube link.</p></div>}
+                        <label htmlFor="youtube" className="form__label">Youtube</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field" placeholder="Twitter" name="twitter" id='twitter'
+                          {...register("tw_link", {pattern: /^(?:(?:http|https):\/\/)?(?:www.)?twitter.com/})}
+                        />
+                        {errors.tw_link && errors.tw_link?.type ==="pattern" && <div className="error-section"><MdReportGmailerrorred/> <p className="error">Invalid twitter link.</p></div>}
+                        <label htmlFor="twitter" className="form__label">Twitter</label>
+                      </div>
+                    </div>
+
+                    <div className="flex-row align-items-center mb-3">
+                      <div className="form__group field">
+                        <input type="text" className="form__field" placeholder="Linkedin" name="linkedin" id='linkedin'
+                          {...register("li_link", {pattern: /^(?:(?:http|https):\/\/)?(?:www.)?linkedin.com/})}
+                        />
+                        {errors.li_link && errors.li_link?.type ==="pattern" && <div className="error-section"><MdReportGmailerrorred/> <p className="error">Invalid linkedin link.</p></div>}
+                        <label htmlFor="linkedin" className="form__label">Linkedin</label>
+                      </div>
+                    </div>
+
+                    <UploadWrapper>
+                      <span className="btn btn-outline-dark btn-file mt-3 upload">
+                        {imageName? <div style={{ "font-weight":"bold"}}>{imageName}</div>: "Upload avatar image" }
+                        <input type="file" name="uploaded-file" onChange={uploadFile}/>
+                        <input type="hidden"
+                            {...register("avatar")}
+                        />
+                        
+                      </span>
+                      {imageName?<MdOutlineCheckCircleOutline className='checked-icon'/>: null}
+                      {imageError?<MdRemoveCircleOutline className='checked-icon' style={{"color":"red"}}/>: null}
+                    </UploadWrapper>
+
+
+                    <input type="hidden" className="form__field" placeholder="password" name="password" id='password'
+                          {...register("password")}
+                        />
+
+                  </form>
+                </InputWrapper>
+              </Modal.Body>
+              <Modal.Footer>
+                <ButtonWrapper>
+                  <Button variant="outline-dark" className='save__button' onClick={handleSubmit(editProfile)}>
+                    Save
+                  </Button>
+                </ButtonWrapper>
+              </Modal.Footer>
+            </Modal>
+          </EditProfileModalWrapper>
             <div className="header__wrapper">
                 <header>
                 </header>
                 <div className="cols__container">
                     <div className="left__col">
                     <div className="img__container">
-                        <img src={user_images.default_user} alt={user?.username} />
+                        {user?.avatar? <img src={user?.avatar} alt={user?.username}/>:<img src={user_images.default_user} alt={user?.username}/>}
+                        
                         <span></span>
                     </div>
                     <h2>{user?.username}</h2>
@@ -91,8 +309,8 @@ const LoggedInUser=(id)=>{
                     <div className="right__col">
                         <ButtonsWrapper>
                             <div className='item-btns flex'>
-                                <Link to = {`/`} className = "item-btn see-details-btn">Edit Profile</Link>
-                                <Link to = {`/`} className = "item-btn see-details-btn">Add Course</Link>
+                                <Link to ="#" onClick={()=>{showModal()}} className = "item-btn see-details-btn">Edit Profile</Link>
+                                <Link to = "/add-course" className = "item-btn see-details-btn">Add Course</Link>
                             </div>
                         </ButtonsWrapper>
                         <MyProfileCoursesList/>
@@ -113,6 +331,164 @@ const MyProfilePage = () => {
         </>
     )
 }
+const ButtonWrapper = styled.div`
+.save__button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100px;
+  height: 40px;
+  border: 0px;
+  color: white;
+  font-weight: bold;
+  background: #fa6995;
+  transition: 0.5s;
+  :hover{
+      background-color: #c21b4e;
+  }
+}
+`
+const EditProfileModalWrapper = styled.div`
+
+`
+const UploadWrapper = styled.div`
+.upload{
+  border: 2px solid #fa6995;
+
+  :hover{
+    background: #fa6995;
+  }
+}
+.checked-icon{
+  margin-top: 20px;
+  margin-left: 10px;
+  font-size: 30px;
+  color: #34fa69;
+}
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  min-width: 150px;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+`
+
+const InputWrapper = styled.div`
+.error-response{
+    display: flex;
+    color: red;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-left: 2rem;
+}
+.error-section{
+    margin-top: 0.5rem;
+    display: flex;
+    color: red;
+    height: 0.5rem;
+    font-weight: bold;
+}
+.error{
+    margin-left: 5px;
+    font-size: 1.1rem;
+}
+.form__group {
+    position: relative;
+    padding: 15px 0 0;
+    margin-top: 5px;
+    width: 100%;
+  }
+
+  .form__field__disabled {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid gray;
+    outline: 0;
+    font-size: 1.3rem;
+    color: black;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  
+    &::placeholder {
+      color: transparent;
+    }
+  
+    &:placeholder-shown ~ .form__label {
+      font-size: 1.3rem;
+      cursor: text;
+      top: 20px;
+    }
+  }
+
+  .form__field {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid #fa6995;
+    outline: 0;
+    font-size: 1.3rem;
+    color: black;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  
+    &::placeholder {
+      color: transparent;
+    }
+  
+    &:placeholder-shown ~ .form__label {
+      font-size: 1.3rem;
+      cursor: text;
+      top: 20px;
+    }
+  }
+  
+  .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: #9b9b9b;
+  }
+  
+  .form__field:focus {
+    ~ .form__label {
+      position: absolute;
+      top: 0;
+      display: block;
+      transition: 0.2s;
+      font-size: 1rem;
+      color: #c21b4e;
+      font-weight:700;    
+    }
+    padding-bottom: 6px;  
+    font-weight: 700;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #c21b4e,#db3769,#f5b0c5);
+    border-image-slice: 1;
+  }
+
+  .form__field{
+    &:required,&:invalid { box-shadow:none; }
+  }
+`
 
 const ButtonsWrapper = styled.div`
 .item-btns{
