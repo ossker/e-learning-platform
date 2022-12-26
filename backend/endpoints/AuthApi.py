@@ -9,7 +9,7 @@ from mappers.UserMapper import user_entity_to_model
 from models.UserModel import UserModel
 from stores_implementation.CourseStore import find_all_courses, find_course_by_id
 from stores_implementation.UserStore import add_user, find_user_by_username, find_user_by_email, find_user_by_id, \
-    find_all_users
+    find_all_users, update_user
 
 auth_ns = Namespace('auth', description="A namespace for Authentication")
 
@@ -115,6 +115,17 @@ class UserResource(Resource):
         """Get a user by id"""
         user_model = find_user_by_id(id)
         return user_model
+
+    @auth_ns.marshal_with(user_model_request)
+    @jwt_required()
+    def put(self, id):
+        """Update user by id """
+        user_to_update = find_user_by_id(id)
+        if not user_to_update:
+            return None
+        data = request.get_json()
+        update_user(user_to_update, data)
+        return user_to_update
 
 @auth_ns.route('/userCourse/<int:id>')
 class UserByCourseIdResource(Resource):
