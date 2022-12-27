@@ -6,8 +6,7 @@ import { course_images } from "../utils/images";
 
 const Course = (props) => {
     
-    const {id, description, name, owner, image, updated_date, actual_price, discounted_price, is_free, language, topics, edit} = props;
-    
+    const {id, description, name, owner, course_image, updated_date, actual_price, discounted_price, is_free, language, topics, edit} = props;
     const [imageDisplay, setImageDisplay] = useState('')
     const [price, setPrice] = useState(0)
     const [user, setUser] = useState('')
@@ -19,21 +18,13 @@ const Course = (props) => {
           setUser(data)
         })
         .catch(err=>console.log(err))
-
-
-      if(image){
-        setImageDisplay(image)
-      }
-      else{
-        setImageDisplay(course_images.image)
-      }
     }, [])
 
     
   return (
     <CourseCard>
       <div className='item-img'>
-        <img src = {image? image : course_images.image} alt = {name} />
+        <img src = {course_image? course_image : course_images.image} alt = {name} />
       </div>
       <div className='item-body'>
         <h5 className='item-name'>{name}</h5>

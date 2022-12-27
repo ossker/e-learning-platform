@@ -7,7 +7,8 @@ from stores_implementation.CourseStore import course_find_indexes_by_category_id
 
 def category_entity_to_model(category_entity) -> CategoryModel:
     return CategoryModel(
-        name=category_entity.name
+        name=category_entity.name,
+        image=category_entity.image
     )
 
 
@@ -15,7 +16,7 @@ def category_model_to_entity(category_model) -> Category:
     courses = course_find_indexes_by_category_id(category_model.id)
     return Category(
         name=category_model.name,
-        courses=courses
+        image=category_model.image
     )
 
 

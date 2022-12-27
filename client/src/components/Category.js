@@ -2,9 +2,9 @@ import React from 'react';
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
-const Category = ({image, name}) => {
+const Category = ({image, name, category_id}) => {
   return (
-    <Link to = {`/category/${name}`}>
+    <Link to = {`/category/${category_id}`}>
       <CategoryItemWrapper className='flex flex-column bg-alice-blue'>
         <div className='category-item-img'>
           <img src = {image} alt = {name} />
@@ -19,7 +19,7 @@ const Category = ({image, name}) => {
 
 const CategoryItemWrapper = styled.div`
   padding: 20px;
-  border: 1px solid transparent;
+  border: 1px solid #827f80;
   transition: var(--transition);
   .category-item-img{
     img{

@@ -16,20 +16,18 @@ const CategoriesList = () => {
           .catch(err=>console.log(err))
       },[]
   );
-  console.log("categories")
-  console.log(categories)
 
   return (
     <CategoriesListWrapper>
-      <div className='container'>
+      <div className='container' style={{"marginBottom":"70px"}}>
         <div className='categories-list-top'>
-          <h2>Top Categories</h2>
+          <h2>Categories</h2>
         </div>
         <div className='categories-list grid'>
           {
-            categories.map((category, idx) => {
+            categories?.map((category, idx) => {
               return (
-                <Category image = {course_images.image} name = {category.name} key = {idx} />
+                <Category image = {category.image? category.image:course_images.image} category_id={category.id} name = {category.name} key = {idx} />
               )
             })
           }
