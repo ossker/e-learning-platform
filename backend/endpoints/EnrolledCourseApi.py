@@ -1,14 +1,18 @@
 from io import BytesIO
 
 from flask import request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Resource, Namespace, fields
 
+from factories_implementation.CourseEnrolledFactory import create_course_enrolled
 from factories_implementation.CourseFactory import create_course
+from mappers.CourseEnrolledMapper import course_enrolled_entity_to_model
 from mappers.CourseMapper import course_entity_to_model
 from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course, \
     update_course, find_courses_by_owner_id, find_courses_by_logged_user, find_course_by_name
-from stores_implementation.EnrolledCourseStore import find_enrolled_course_by_course_id_and_student_id
+from stores_implementation.EnrolledCourseStore import find_enrolled_course_by_course_id_and_student_id, \
+    add_enrolled_course
+from stores_implementation.UserStore import find_user_by_email
 
 enrolled_course_ns = Namespace('enrolled_course', description="A namespace for CourseEnrolled")
 
@@ -35,14 +39,29 @@ class EnrolledCoursesResource(Resource):
     @jwt_required()
     def post(self):
         """Create a new enrolled course"""
-        # data = request.get_json()
-        # new_course_entity = create_course(data)
-        # if new_course_entity:
-        #     new_course = course_entity_to_model(new_course_entity)
-        #     add_course(new_course)
-        #     return {"status": 1, "course_name": new_course.name}
-        # else:
-        #     return {"status": 0}
+        data = request.get_json()
+        student_id = data['student_id']
+        course_id = data['course_id']
+
+        enrolled_course_model = find_enrolled_course_by_course_id_and_student_id(course_id, student_id)
+        if enrolled_course_model is not None:
+            return jsonify({"status": 2})
+
+        current_user_email = get_jwt_identity()
+        actual_user = find_user_by_email(current_user_email)
+        course = find_course_by_id(course_id)
+        if actual_user.id == course.owner:
+            return jsonify({"status": 3})
+
+        new_enrolled_course_entity = create_course_enrolled(data)
+        if new_enrolled_course_entity:
+            new_enrolled_course_model = course_enrolled_entity_to_model(new_enrolled_course_entity)
+            add_enrolled_course(new_enrolled_course_model)
+            return {"status": 1,
+                    "student_id": new_enrolled_course_model.student_id,
+                    "course_id": new_enrolled_course_model.course_id}
+        else:
+            return {"status": 0}
 
 
 @enrolled_course_ns.route('/enrolled_course/<int:course_id>/<int:user_id>/')

@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
 import EnrolledPagination from './EnrolledPagination';
 
@@ -35,7 +36,7 @@ const EnrolledTabs = () => {
           />
         
           ) : (
-          <h1>You have not enrolled any courses.</h1>
+          <p className='not-enrolled'><MdInfoOutline/> You have not enrolled any courses.</p>
       )}
     </UserTabsWrapper>
     
@@ -43,6 +44,10 @@ const EnrolledTabs = () => {
 }
 
 const UserTabsWrapper = styled.div`
+.not-enrolled{
+  padding: 20px 0px 0px 10px;
+  font-size: 1.2rem;
+}
   .tabs{
     margin-top: 16px;
 

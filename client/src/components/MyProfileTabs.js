@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
 import { useCourses } from '../context/courses_context';
 import Course from "./Course";
@@ -35,7 +36,8 @@ const MyProfileTabs = () => {
           />
         
           ) : (
-          <h1>No Courses to display</h1>
+          <p className='not-uploaded'><MdInfoOutline/> You have not uploaded any courses. 
+          Try via the button above.</p>
       )}
     </UserTabsWrapper>
     
@@ -43,6 +45,10 @@ const MyProfileTabs = () => {
 }
 
 const UserTabsWrapper = styled.div`
+  .not-uploaded{
+    padding: 20px 0px 0px 10px;
+    font-size: 1.2rem;
+  }
   .tabs{
     margin-top: 16px;
 

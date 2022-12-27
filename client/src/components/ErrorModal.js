@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 
-const ErrorModal = () => {
+const ErrorModal = (content) => {
     const [show, setShow] = useState(true);
 
     const handleClose = () => setShow(false);
@@ -20,7 +20,7 @@ const ErrorModal = () => {
                 <Modal.Title><h3 className='ops'>Ooops..</h3></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h5 className='token'>Something went wrong. Try again later.</h5>
+                    {content?<h5 className='token'>{content.content}</h5>:<h5 className='token'>Something went wrong. Try again later.</h5>}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="outline-dark" className='button' onClick={handleClose}>

@@ -7,7 +7,7 @@ const MyProfileCoursesList = () => {
         <UserCourseListWrapper>
             <div className='container'>
                 <div className='courses-list-top'>
-                    <h2>My courses.</h2>
+                    <p>Uploaded courses.</p>
                 </div>
                 <MyProfileTabs/>
             </div>
@@ -16,9 +16,14 @@ const MyProfileCoursesList = () => {
 }
 
 const UserCourseListWrapper = styled.div`
-  padding: 40px 0;
-  .courses-list-top p{
-    font-size: 1.8rem;
+  .courses-list-top{
+    padding: 10px 10px 0px 20px;
+    border: 1px solid black;
+    text-align: center;
+    p{
+        font-size: 2rem;
+        font-weight: 500;
+    }
   }
 `;
 
