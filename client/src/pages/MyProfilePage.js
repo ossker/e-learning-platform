@@ -15,6 +15,7 @@ import { logout, useAuth } from '../auth';
 import TokenExpiredModal from '../components/TokenExpiredModal'
 import { RiContactsBookLine } from 'react-icons/ri'
 import {MdConstruction, MdInfo ,MdCancel, MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
+import EnrolledCoursesList from '../components/EnrolledCoursesList'
 
 const LoggedInUser=(id)=>{
     const [courses, setCourses] = useState([]);
@@ -314,6 +315,7 @@ const uploadFile = async (e) => {
                             </div>
                         </ButtonsWrapper>
                         <MyProfileCoursesList/>
+                        <EnrolledCoursesList/>
                     </div>
                 </div>
             </div>

@@ -16,6 +16,7 @@ tutorials_list = course_ns.model(
     {
         "id": fields.Integer(required=True),
         "title": fields.String(),
+        "video": fields.String()
     }
 )
 

@@ -12,6 +12,7 @@ import UpdateCoursePage from './components/UpdateCourse';
 import SingleCoursePage from './pages/SingleCoursePage';
 import MyProfilePage from './pages/MyProfilePage';
 import UserPage from './pages/UserPage';
+import EnrolledCoursePage from './pages/EnrolledCoursePage';
 
 const App = () => {
     return (
@@ -36,6 +37,9 @@ const App = () => {
                     </Route>
                     <Route path="/courses/:id">
                         <SingleCoursePage/>
+                    </Route>
+                    <Route path="/enrolled/:course_id/:user_id">
+                        <EnrolledCoursePage/>
                     </Route>
                     <Route path="/users/:id">
                         <UserPage/>
