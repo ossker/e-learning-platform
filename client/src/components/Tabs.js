@@ -1,30 +1,55 @@
 import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
+import { useCategories } from '../context/categories_context';
 import { useCourses } from '../context/courses_context';
-import Course from "./Course";
 import Pagination from './Pagination';
 
 const Tabs = () => {
+  const [activeTab, setActiveTab] = useState('');
   const courses=useCourses();
+  const categories=useCategories();
+
+  const tabHandler = (category_id) => {
+    setActiveTab(category_id);
+  }
+console.log(categories)
+console.log(courses)
   return (
     <TabsWrapper>
+      <div className='tabs'>
+        <ul className='flex flex-wrap'>
+          {
+          categories?.map((category, idx) => (
+            <li className='tabs-head-item' key={idx}>
+              <button type = "button" className={`tab-btn ${activeTab==category.id ? "active-tab" : ""}`} onClick={()=>{tabHandler(category.id)}}>{category.name}</button>
+            </li>
+          ))
+          }
+        </ul>
+
         {courses?.length > 0 ? (
           
-            <Pagination
-              data={courses}
-              pageLimit={5}
-              dataLimit={4}
-            />
-          
-            ) : (
-            <h1>No Courses to display</h1>
-        )}
+          <Pagination
+            data={activeTab?courses.filter(course => course.category_id == activeTab):courses}
+            pageLimit={5}
+            dataLimit={4}
+          />
+        
+          ) : (
+          <h1>No Courses to display</h1>
+      )}
+
+      </div>
     </TabsWrapper>
     
   )
 }
 
 const TabsWrapper = styled.div`
+.active-tab{
+  background-image: linear-gradient(to right, #e00052 0%, #7400e0 100%);
+  color: white;
+}
   .tabs{
     margin-top: 16px;
 

@@ -16,8 +16,6 @@ const CategoriesList = () => {
           .catch(err=>console.log(err))
       },[]
   );
-  console.log("categories")
-  console.log(categories)
 
   return (
     <CategoriesListWrapper>
@@ -27,7 +25,7 @@ const CategoriesList = () => {
         </div>
         <div className='categories-list grid'>
           {
-            categories.map((category, idx) => {
+            categories?.map((category, idx) => {
               return (
                 <Category image = {course_images.image} name = {category.name} key = {idx} />
               )

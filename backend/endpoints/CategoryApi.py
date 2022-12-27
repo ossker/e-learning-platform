@@ -22,6 +22,7 @@ category_model_request = category_ns.model(
     {
         "id": fields.Integer(readOnly=True),
         "name": fields.String(required=True),
+        "image": fields.String(),
         "courses": fields.List(fields.Nested(courses_list), readonly=True)
     }
 )
@@ -38,7 +39,6 @@ class CategoriesResource(Resource):
 
     @category_ns.expect(category_model_request)
     @category_ns.marshal_with(category_model_request)
-    @jwt_required()
     def post(self):
         """Create a new category"""
         data = request.get_json()
