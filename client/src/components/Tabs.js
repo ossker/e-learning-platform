@@ -12,8 +12,6 @@ const Tabs = () => {
   const tabHandler = (category_id) => {
     setActiveTab(category_id);
   }
-console.log(categories)
-console.log(courses)
   return (
     <TabsWrapper>
       <div className='tabs'>

@@ -1,7 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import Course from './Course';
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { MdInfoOutline, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { FaRegFrow } from "react-icons/fa";
+import { BsEmojiAngry, BsEmojiFrown } from 'react-icons/bs';
 
 const Pagination = ({ data, title, pageLimit, dataLimit }) => {
     const [pages] = useState(Math.ceil(data.length / dataLimit));
@@ -39,9 +41,10 @@ const Pagination = ({ data, title, pageLimit, dataLimit }) => {
       <div>
         <CoursesWrapper  ref={coursesSection}>
           <div className='tabs'>
+            {getPaginatedData().length == 0?<div className='not-uploaded'><p><MdInfoOutline className='icon'/> No courses to display in this category</p></div>:null}
             <div className='tabs-body' >
               {getPaginatedData().map((course, idx) => (
-                <Course key={idx} id={course.id} description={course.description} name={course.name} owner={course.owner} image={course.course_image} updated_date={course.updated_date}
+                <Course key={idx} id={course.id} description={course.description} name={course.name} owner={course.owner} course_image={course.course_image} updated_date={course.updated_date}
                 actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} update={false} 
               />
               ))}
@@ -82,6 +85,7 @@ const Pagination = ({ data, title, pageLimit, dataLimit }) => {
     );
 }
 const PaginationWrapper = styled.div`
+
 .pagination {
   display: flex;
   align-items: center;
@@ -90,7 +94,7 @@ const PaginationWrapper = styled.div`
 
 .paginationItem {
   background: #fff;
-  border: 2px solid #666;
+  border: 1px solid #666;
   padding: 10px 15px;
   border-radius: 10%;
   height: 45px;
@@ -98,6 +102,11 @@ const PaginationWrapper = styled.div`
   position: relative;
   margin: 0 5px;
   cursor: pointer;
+  transition: background 1s;
+  :hover{
+    background: linear-gradient(to right, #e00052 0%, #7400e0 100%);
+    color:white;
+  }
 }
 
 .paginationItem span {
@@ -132,6 +141,20 @@ const PaginationWrapper = styled.div`
 `
 
 const CoursesWrapper = styled.div`
+.not-uploaded{
+  padding: 20px 20px 10px 20px;
+  background: white;
+  border: 1px solid red;
+  font-size: 1.5rem;
+  color: red;
+  font-weight: 500;
+}
+.icon{
+  margin-bottom:4px;
+  font-size: 2rem;
+}
+
+
   .tabs{
     margin-top: 16px;
 
