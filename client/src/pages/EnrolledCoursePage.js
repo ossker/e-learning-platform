@@ -1,61 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from "styled-components";
 import StarRating from '../components/StarRating';
 import {MdInfo} from "react-icons/md";
 import {TbWorld} from "react-icons/tb";
 import {FaShoppingCart} from "react-icons/fa";
-import {RiClosedCaptioningFill} from "react-icons/ri";
+import {RiClosedCaptioningFill, RiContactsBookLine} from "react-icons/ri";
 import {BiCheck} from "react-icons/bi";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
-import { useCourses } from '../context/courses_context';
-import { useCategories } from '../context/categories_context';
-import { useUsers } from '../context/users_context';
+import Accordion from 'react-bootstrap/Accordion';
+import ReactPlayer from 'react-player'
 import { logout, useAuth } from '../auth';
-import ErrorModal from '../components/ErrorModal';
 import TokenExpiredModal from '../components/TokenExpiredModal';
-import SuccessModal from '../components/SuccessModal';
 
-const SingleCoursePage = () => {
-    const {id} = useParams();
+const EnrolledCoursePage = () => {
+    const {course_id, user_id} = useParams();
     const [category, setCategory] = useState()
-    const [user, setUser] = useState()
+    const [owner, setOwner] = useState()
     const [course, setCourse] = useState()
+    const [enrolledCourse, setEnrolledCourse] = useState()
     const [duration, setDuration] = useState()
-    const [showModalTokenExpired, setShowModalTokenExpired] = useState(false);
-    const [showModalError, setShowModalError] = useState(false);
-    const [showModalSuccess, setShowModalSuccess] = useState(false);
-    const [showModalOwner, setShowModalOwner] = useState(false);
-    
-    const [student, setStudent] = useState()
-    const history = useHistory()
-    const [logged]=useAuth();
-
 
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
-    const requestOptionsStudent ={
+    const requestOptions ={
         method: 'GET',
         headers: {
             'content-type':'application/json',
             'Authorization': `Bearer ${JSON.parse(token)}`
         }
     }
-
-    useEffect(
-        ()=>{
-            fetch('/auth/actual-user', requestOptionsStudent)
-            .then(res=>res.json())
-            .then(data=>{
-                setStudent(data)
-            })
-            .catch(err=>console.log(err))
-        },[]
-    );
-
     useEffect(
       ()=>{
-          fetch(`/category/categoryCourse/${id}`)
+          fetch(`/category/categoryCourse/${course_id}`)
           .then(res=>res.json())
           .then(data=>{
               setCategory(data)
@@ -66,7 +43,7 @@ const SingleCoursePage = () => {
 
   useEffect(
     ()=>{
-        fetch(`/tutorial/duration-tutorials/${id}`)
+        fetch(`/tutorial/duration-tutorials/${course_id}`)
         .then(res=>res.json())
         .then(data=>{
             setDuration(data)
@@ -77,10 +54,10 @@ const SingleCoursePage = () => {
 
     useEffect(
       ()=>{
-          fetch(`/auth/userCourse/${id}`)
+          fetch(`/auth/userCourse/${course_id}`)
           .then(res=>res.json())
           .then(data=>{
-              setUser(data)
+              setOwner(data)
           })
           .catch(err=>console.log(err))
       },[]
@@ -88,7 +65,7 @@ const SingleCoursePage = () => {
 
   useEffect(
     ()=>{
-        fetch(`/course/course/${id}`)
+        fetch(`/course/course/${course_id}`)
         .then(res=>res.json())
         .then(data=>{
             setCourse(data)
@@ -96,56 +73,29 @@ const SingleCoursePage = () => {
         .catch(err=>console.log(err))
     },[]
 );
-  
-const enrollCourse = () => {
 
-  const token = localStorage.getItem('REACT_TOKEN_AUTH_KEY');
-  if(student){
-    const data = {"student_id": student.id, "course_id": course.id, "is_finished": 0}
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${JSON.parse(token)}`
-    },
-    body: JSON.stringify(data)
-  }
-
-  fetch('/enrolled_course/enrolled_courses', requestOptions)
-  .then(async res => {
-      let response = await res.json()
-      if(response.msg == "Token has expired"){
-        logout();
-        setShowModalTokenExpired(true);
-      }
-      else if(response.status == 1){
-        history.push('/my-profile')
-      }
-      else if(response.status == 2){
-        setShowModalSuccess(true)
-      }
-      else if(response.status == 3){
-        setShowModalOwner(true)
-      }
-      else{
-        setShowModalError(true)
-      }       
-    })
-    .then(data => {})
-    .catch(err => console.log(err))
-  }
-  else{
-    logout();
-    setShowModalTokenExpired(true);
-  }
-}
-
+const [showModalTokenExpired, setShowModalTokenExpired] = useState(false);
+useEffect(
+    ()=>{
+        fetch(`/enrolled_course/enrolled_course/${course_id}/${user_id}`, requestOptions)
+        .then(res=>res.json())
+        .then(data=>{
+            console.log("DEJTA")
+            console.log(data)
+            if(data.msg == "Token has expired"){
+                logout();
+                setShowModalTokenExpired(true);
+            }
+            setEnrolledCourse(data)
+        })
+        .catch(err=>console.log(err))
+    },[]
+);
+console.log("course?.tutorials")
+    console.log(course?.tutorials)
   return (
     <SingleCourseWrapper>
-      {showModalTokenExpired?<TokenExpiredModal/>:null}
-      {showModalError?<ErrorModal/>:null}
-      {showModalSuccess?<SuccessModal content="You already enrolled this course."/>:null}
-      {showModalOwner?<ErrorModal content="You are owning this course."/>:null}
+        {showModalTokenExpired?<TokenExpiredModal/>:null}
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
           <img src = {course?.course_image? course?.course_image : course_images.image} alt = {course?.name} className="img"/>
@@ -166,7 +116,7 @@ const enrollCourse = () => {
 
             <ul className='course-info'>
               <li>
-                <span className='fs-14'>Created by <span className='fw-6 opacity-08'><Link to = {`/users/${user?.id}`}>{user?.username}</Link></span></span>
+                <span className='fs-14'>Created by <span className='fw-6 opacity-08'><Link to = {`/users/${owner?.id}`}>{owner?.username}</Link></span></span>
               </li>
               <li className='flex'>
                 <span><MdInfo /></span>
@@ -185,53 +135,37 @@ const enrollCourse = () => {
 
           <div className='course-foot'>
             <div className='course-price'>
-              {!course?.is_free?<div><span className='new-price fs-26 fw-8'>{course?.discounted_price}</span>
-              <span className='old-price fs-26 fw-6'>{course?.actual_price}</span></div>:<span className='free-price fs-26 fw-8'>Free</span>}
+              {enrolledCourse?.is_finished?<span className='free-price fs-26 fw-8' style={{"color":"green"}}>Finished</span>:<span className='free-price fs-26 fw-8' style={{"color":"red"}}>In progress</span>}
               
             </div>
-          </div>
-
-          <div className='course-btn'>
-            {logged?<Link to="#" onClick={()=>{enrollCourse()}} className='add-to-cart-btn d-inline-block fw-7 bg-purple'>
-              <FaShoppingCart /> Enroll
-            </Link>:<button className='add-to-cart-btn d-inline-block fw-7 button-disabled'>
-              <FaShoppingCart /> Enroll
-            </button>}
-            {logged?null:<p className="small mt-2 pt-1 mb-0"><Link to="/login" className={"fw-bold"} style={{color: '#c72cf2'}}>Log In</Link> to enroll in the course</p>}
-            
           </div>
         </div>
       </div>
 
       <div className='course-full bg-white text-dark'>
-        <div className='course-learn mx-auto'>
-          <div className='course-sc-title'>What you'll learn</div>
-          <ul className='course-learn-list grid'>
-            {
-              course?.what_you_will_learn && course?.what_you_will_learn.map((learnItem, idx) => {
-                return (
-                  <li key = {idx}>
-                    <span><BiCheck /></span>
-                    <span className='fs-14 fw-5 opacity-09'>{learnItem.title}</span>
-                  </li>
-                )
-              })
-            }
-          </ul>
-        </div>
-
         <div className='course-content mx-auto'>
           <div className='course-sc-title'>Course content</div>
           <ul className='course-content-list'>
-            {
-              course?.tutorials && course?.tutorials.map((contentItem, idx) => {
-                return (
-                  <li key = {idx}>
-                    <span>{contentItem.title}</span>
-                  </li>
-                )
-              })
-            }
+            <Accordion defaultActiveKey="0">
+                {
+                    course?.tutorials && course?.tutorials.map((contentItem, idx) => {
+                        return (
+                            
+                            <Accordion.Item eventKey={idx} key={idx} className="mt-2 content-item">
+                                <Accordion.Header><div className='content-title'>{idx+1}. {contentItem.title}</div></Accordion.Header>
+                                <Accordion.Body className="content-body">
+                                    <ReactPlayer 
+                                        width="100%"
+                                        url={contentItem.video}
+                                        controls
+                                    />
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            
+                        )
+                    })
+                }
+            </Accordion>
           </ul>
         </div>
       </div>
@@ -242,12 +176,14 @@ const enrollCourse = () => {
 const SingleCourseWrapper = styled.div`
   background: var(--clr-dark);
   color: var(--clr-white);
-  
-  .button-disabled{
-    color:#fff;
-    border-color: #a0a0a0;
-    background-color: #a0a0a0;
-    cursor:not-allowed !important;
+    .content-item{
+        border: 1px solid #878787;
+    }
+  .content-body{
+    background:#ededed;
+  }
+  .content-title{
+    font-weight: bold;
   }
   .img{
     margin-top: 10%;
@@ -406,4 +342,4 @@ const SingleCourseWrapper = styled.div`
   }
 `;
 
-export default SingleCoursePage
+export default EnrolledCoursePage

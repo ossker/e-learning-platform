@@ -9,7 +9,9 @@ from endpoints import (
     auth_ns,
     category_ns,
     tutorial_ns,
-    course_ns, topic_ns,
+    course_ns,
+    topic_ns,
+    enrolled_course_ns,
 )
 from models import (
     CourseModel,
@@ -21,6 +23,7 @@ from models import (
 )
 
 from flask_cors import CORS
+
 
 def create_app(config):
     app = Flask(__name__)
@@ -40,7 +43,7 @@ def create_app(config):
     api.add_namespace(category_ns)
     api.add_namespace(tutorial_ns)
     api.add_namespace(topic_ns)
-
+    api.add_namespace(enrolled_course_ns)
 
     @app.shell_context_processor
     def make_shell_context():
@@ -53,6 +56,5 @@ def create_app(config):
             "User": UserModel,
             "Topic": TopicModel
         }
-
 
     return app

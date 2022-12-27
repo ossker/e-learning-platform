@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import MyProfileTabs from "./MyProfileTabs";
+import EnrolledTabs from "./EnrolledTabs";
 
-const MyProfileCoursesList = () => {
+const EnrolledCoursesList = () => {
     return (
         <UserCourseListWrapper>
             <div className='container'>
                 <div className='courses-list-top'>
-                    <p>Uploaded courses.</p>
+                    <p>Enrolled courses.</p>
                 </div>
-                <MyProfileTabs/>
+                <EnrolledTabs/>
             </div>
         </UserCourseListWrapper>
     )
 }
 
 const UserCourseListWrapper = styled.div`
+  padding: 40px 0;
   .courses-list-top{
     padding: 10px 10px 0px 20px;
     border: 1px solid black;
@@ -27,4 +28,4 @@ const UserCourseListWrapper = styled.div`
   }
 `;
 
-export default MyProfileCoursesList;
+export default EnrolledCoursesList;

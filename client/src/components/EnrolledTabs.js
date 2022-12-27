@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
-import { useCourses } from '../context/courses_context';
-import Course from "./Course";
-import MyProfilePagination from './MyProfilePagination';
+import EnrolledPagination from './EnrolledPagination';
 
-const MyProfileTabs = () => {
+const EnrolledTabs = () => {
     const [courses, setCourses] = useState([]);
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     const requestOptions ={
@@ -18,26 +16,27 @@ const MyProfileTabs = () => {
 
     useEffect(
         ()=>{
-            fetch('/course/my-courses', requestOptions)
+            fetch('/auth/actual-user', requestOptions)
             .then(res=>res.json())
             .then(data=>{
-                setCourses(data)
+                setCourses(data.course_associations)
             })
             .catch(err=>console.log(err))
         },[]
     );
+        
+    
   return (
     <UserTabsWrapper>
       {courses?.length > 0 ? (
-          <MyProfilePagination
+          <EnrolledPagination
             data={courses}
             pageLimit={5}
             dataLimit={3}
           />
         
           ) : (
-          <p className='not-uploaded'><MdInfoOutline/> You have not uploaded any courses. 
-          Try via the button above.</p>
+          <p className='not-enrolled'><MdInfoOutline/> You have not enrolled any courses.</p>
       )}
     </UserTabsWrapper>
     
@@ -45,10 +44,10 @@ const MyProfileTabs = () => {
 }
 
 const UserTabsWrapper = styled.div`
-  .not-uploaded{
-    padding: 20px 0px 0px 10px;
-    font-size: 1.2rem;
-  }
+.not-enrolled{
+  padding: 20px 0px 0px 10px;
+  font-size: 1.2rem;
+}
   .tabs{
     margin-top: 16px;
 
@@ -93,4 +92,4 @@ const UserTabsWrapper = styled.div`
   }
 `;
 
-export default MyProfileTabs
+export default EnrolledTabs

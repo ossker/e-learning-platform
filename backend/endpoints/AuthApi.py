@@ -32,6 +32,32 @@ login_model = auth_ns.model(
     }
 )
 
+courses_list = auth_ns.model(
+    "Course",
+    {
+        "id": fields.Integer(readOnly=True),
+        "name": fields.String(),
+        "description": fields.String(),
+        "owner": fields.Integer(),
+        "course_image": fields.String(),
+        "updated_date": fields.String(),
+        "actual_price": fields.Float(),
+        "discounted_price": fields.Float(),
+        "is_free": fields.Boolean(),
+        "language": fields.String(),
+        "category_id": fields.Integer()
+    }
+)
+
+course = auth_ns.model(
+    "CourseEnrolled",
+    {
+        "course": fields.List(fields.Nested(courses_list), readonly=True),
+        "student_id": fields.Integer(),
+        "is_finished": fields.Boolean()
+    }
+)
+
 user_model_request = auth_ns.model(
     "User",
     {
@@ -47,6 +73,7 @@ user_model_request = auth_ns.model(
         "li_link": fields.String(),
         "yt_link": fields.String(),
         "tw_link": fields.String(),
+        "course_associations": fields.List(fields.Nested(course), readonly=True)
 
     }
 )
