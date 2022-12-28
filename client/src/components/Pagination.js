@@ -96,15 +96,15 @@ const PaginationWrapper = styled.div`
   background: #fff;
   border: 1px solid #666;
   padding: 10px 15px;
-  border-radius: 10%;
+  border-radius: 0%;
   height: 45px;
   width: 45px;
   position: relative;
   margin: 0 5px;
   cursor: pointer;
-  transition: background 1s;
+  transition: 0.5s ease;
   :hover{
-    background: linear-gradient(to right, #e00052 0%, #7400e0 100%);
+    background: black;
     color:white;
   }
 }
@@ -120,10 +120,9 @@ const PaginationWrapper = styled.div`
 .next {
   background: #fff;
   padding: 10px;
-  color: #851f99;
+  color: black;
   margin: 0 10px;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .paginationItem.active {

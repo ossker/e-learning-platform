@@ -89,14 +89,19 @@ const PaginationWrapper = styled.div`
 
 .paginationItem {
   background: #fff;
-  border: 2px solid #666;
+  border: 1px solid #666;
   padding: 10px 15px;
-  border-radius: 10%;
+  border-radius: 0%;
   height: 45px;
   width: 45px;
   position: relative;
   margin: 0 5px;
   cursor: pointer;
+  transition: 0.5s ease;
+  :hover{
+    background: black;
+    color:white;
+  }
 }
 
 .paginationItem span {
@@ -110,7 +115,7 @@ const PaginationWrapper = styled.div`
 .next {
   background: #fff;
   padding: 10px;
-  color: #851f99;
+  color: black;
   margin: 0 10px;
   cursor: pointer;
   font-weight: bold;
