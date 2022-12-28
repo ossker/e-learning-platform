@@ -14,11 +14,12 @@ import MyProfilePage from './pages/MyProfilePage';
 import UserPage from './pages/UserPage';
 import EnrolledCoursePage from './pages/EnrolledCoursePage';
 import CoursesPage from './pages/CoursesPage';
+import Footer from './components/Footer';
 
 const App = () => {
     return (
         <Router>
-            <div className=''>
+            <div style={{"min-height":"61.1vh"}}>
                 <NavBar/>
                 <Switch>
                     <Route path="/add-course">
@@ -53,6 +54,7 @@ const App = () => {
                     </Route>
                 </Switch>
             </div>
+            <Footer/>
         </Router>
     )
 }
