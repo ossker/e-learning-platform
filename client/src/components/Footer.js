@@ -7,7 +7,7 @@ import { useAuth, logout } from '../auth'
 
 const Footer = () => {
     const categories=useCategories();
-
+    const [logged] = useAuth();
   return (
     <FooterWrapper>
     <footer className="site-footer">
@@ -36,11 +36,14 @@ const Footer = () => {
             <ul className="footer-links">
               <li><a href="#">About Us</a></li>
               <li><a href="#">Contact Us</a></li>
-              <li><Link to = '/' onClick={()=>{logout()}}>Logout</Link></li>
-              <li><Link to = '/login'>Login</Link></li>
-              <li><Link to = '/signup'>Sign up</Link></li>
-              <li><Link to = '/my-profile'>My profile</Link></li>
-              <li><Link to = '/add-course'>Add course</Link></li>
+              {logged?<>
+                <li><Link to = '/my-profile'>My profile</Link></li>
+                <li><Link to = '/add-course'>Add course</Link></li>
+                <li><Link to = '/' onClick={()=>{logout()}}>Logout</Link></li>
+              </>:<>
+                <li><Link to = '/login'>Login</Link></li>
+                <li><Link to = '/signup'>Sign up</Link></li>
+              </>}
             </ul>
           </div>
         </div>
