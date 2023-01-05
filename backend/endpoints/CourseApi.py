@@ -102,7 +102,7 @@ class CourseResource(Resource):
             delete_many_tutorials_by_course_id(course_to_delete.id)
             delete_course(course_to_delete)
             return {"status": 1}
-        return {"status": 1}
+        return {"status": 0}
 
 
 @course_ns.route('/courses-owner/<int:id>')
