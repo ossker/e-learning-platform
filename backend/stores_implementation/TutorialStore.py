@@ -35,6 +35,12 @@ def find_tutorial_by_id(tutorial_id) -> TutorialModel:
     return tutorial_model
 
 
+def delete_many_tutorials_by_course_id(course_id) -> None:
+    tutorial_models = find_tutorials_by_course_id(course_id)
+    for tutorial in tutorial_models:
+        delete_tutorial(tutorial)
+
+
 def _get_duration_of_tutorials(tutorials_models) -> str:
     seconds = 0
     for tutorial in tutorials_models:
