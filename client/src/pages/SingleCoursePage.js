@@ -251,7 +251,7 @@ const SingleCourseWrapper = styled.div`
   }
   .img{
     margin-top: 10%;
-    min-width: 600px;
+    min-width: 400px;
   }
   .course-intro{
     padding: 40px 16px;

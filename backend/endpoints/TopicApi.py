@@ -4,7 +4,7 @@ from flask_restx import Resource, Namespace, fields
 
 from factories_implementation.TopicFactory import create_topic
 from mappers.TopicMapper import topic_entity_to_model
-from stores_implementation.TopicStore import add_topic
+from stores_implementation.TopicStore import add_topic, find_topic_by_id, delete_topic
 
 topic_ns = Namespace('topic', description="A namespace for Topic")
 
@@ -53,4 +53,8 @@ class TopicResource(Resource):
     @jwt_required()
     def delete(self, id):
         """Delete a topic by id"""
-        pass
+        topic_to_delete = find_topic_by_id(id)
+        if topic_to_delete:
+            delete_topic(topic_to_delete)
+            return {"status": 1}
+        return {"status": 0}

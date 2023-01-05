@@ -5,7 +5,7 @@ from flask_restx import Resource, Namespace, fields
 from factories_implementation.TutorialFactory import create_tutorial
 from mappers.TutorialMapper import tutorial_entity_to_model
 from stores_implementation.TutorialStore import find_tutorials_by_course_id, add_tutorial, find_all_tutorials, \
-    get_duration_of_tutorials_by_course_id
+    get_duration_of_tutorials_by_course_id, delete_tutorial, find_tutorial_by_id
 
 tutorial_ns = Namespace('tutorial', description="A namespace for Tutorial")
 
@@ -68,7 +68,11 @@ class TutorialResource(Resource):
     @jwt_required()
     def delete(self, id):
         """Delete a tutorial by id"""
-        pass
+        tutorial_to_delete = find_tutorial_by_id(id)
+        if tutorial_to_delete:
+            delete_tutorial(tutorial_to_delete)
+            return {"status": 1}
+        return {"status": 0}
 
 @tutorial_ns.route('/duration-tutorials/<int:id>')
 class TutorialsDurationResource(Resource):

@@ -10,20 +10,20 @@ const Footer = () => {
 
   return (
     <FooterWrapper>
-    <footer class="site-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 col-md-6">
+    <footer className="site-footer">
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-12 col-md-6">
             <h6>About</h6>
-            <p class="text-justify about">Kursiki is an initiative to help the upcoming programmers start their career path. 
+            <p className="text-justify about">Kursiki is an initiative to help the upcoming programmers start their career path. 
             We focuse on providing the most understandable guides and tutorials. We will help programmers build 
             up concepts in different programming languages that include Python, JavaScript, C#, CSS, HTML, PHP, Java, 
             SQL and so more in the future.</p>
           </div>
 
-          <div class="col-xs-6 col-md-3">
+          <div className="col-xs-6 col-md-3">
             <h6>Categories</h6>
-            <ul class="footer-links">
+            <ul className="footer-links">
                 {categories?.map((category, idx) => (
                     <li><Link to = {`/category/${category.id}`}>{category.name}</Link></li>
                 ))
@@ -31,9 +31,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div class="col-xs-6 col-md-3">
+          <div className="col-xs-6 col-md-3">
             <h6>Quick Links</h6>
-            <ul class="footer-links">
+            <ul className="footer-links">
               <li><a href="#">About Us</a></li>
               <li><a href="#">Contact Us</a></li>
               <li><Link to = '/' onClick={()=>{logout()}}>Logout</Link></li>
@@ -46,18 +46,18 @@ const Footer = () => {
         </div>
         <hr></hr>
       </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 col-sm-6 col-xs-12">
-            <p class="copyright-text">Copyright &copy; 2022 All Rights Reserved by<a href="#"> Kursiki</a>.</p>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 col-sm-6 col-xs-12">
+            <p className="copyright-text">Copyright &copy; 2022 All Rights Reserved by<a href="#"> Kursiki</a>.</p>
           </div>
 
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <ul class="social-icons">
-              <li><a class="facebook" href="#"><BsFacebook/></a></li>
-              <li><a class="twitter" href="#"><BsTwitter/></a></li>
-              <li><a class="youtube" href="#"><BsYoutube/></a></li>
-              <li><a class="linkedin" href="#"><BsLinkedin/></a></li>   
+          <div className="col-md-4 col-sm-6 col-xs-12">
+            <ul className="social-icons">
+              <li><a className="facebook" href="#"><BsFacebook/></a></li>
+              <li><a className="twitter" href="#"><BsTwitter/></a></li>
+              <li><a className="youtube" href="#"><BsYoutube/></a></li>
+              <li><a className="linkedin" href="#"><BsLinkedin/></a></li>   
             </ul>
           </div>
         </div>
@@ -148,7 +148,7 @@ const FooterWrapper = styled.div`
 }
 @media (max-width:991px)
 {
-  .site-footer [class^=col-]
+  .site-footer [className^=col-]
   {
     margin-bottom:30px
   }

@@ -42,7 +42,7 @@ const Course = (props) => {
       </div>
       <div className='item-btns flex'>
         <Link to = {`/courses/${id}`} className = "item-btn see-details-btn">See details</Link>
-        {edit?<Link to = {`/`} className = "item-btn see-details-btn">Edit Course</Link>:""}
+        {edit?<Link to = {`/edit-course/${id}`} className = "item-btn see-details-btn">Edit Course</Link>:""}
       </div>
     </CourseCard>
   )

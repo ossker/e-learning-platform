@@ -8,6 +8,7 @@ def find_tutorials_by_course_id(course_id: int) -> List[TutorialModel]:
     tutorial_models = TutorialModel.query.filter_by(course_id=course_id).all()
     return tutorial_models
 
+
 def find_all_tutorials() -> List[TutorialModel]:
     tutorial_models = TutorialModel.query.all()
     return tutorial_models
@@ -18,9 +19,20 @@ def get_duration_of_tutorials_by_course_id(course_id) -> str:
     duration = _get_duration_of_tutorials(tutorials_models)
     return duration
 
+
 def add_tutorial(tutorial_model: TutorialModel) -> None:
     db.session.add(tutorial_model)
     db.session.commit()
+
+
+def delete_tutorial(tutorial_model: TutorialModel) -> None:
+    db.session.delete(tutorial_model)
+    db.session.commit()
+
+
+def find_tutorial_by_id(tutorial_id) -> TutorialModel:
+    tutorial_model = TutorialModel.query.filter_by(id=tutorial_id).first()
+    return tutorial_model
 
 
 def _get_duration_of_tutorials(tutorials_models) -> str:
