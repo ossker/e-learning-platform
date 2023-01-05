@@ -21,7 +21,7 @@ const PageTwo = ({ onButtonClick, courseName }) => {
             fetch(`/course/course-by-name/${courseName}`)
             .then(res=>res.json())
             .then(data=>{
-                setValue("course_id", data.id);
+                setValue("course", data.id);
             }) 
             .catch(err=>console.log(err))
         },[]
@@ -57,6 +57,7 @@ const PageTwo = ({ onButtonClick, courseName }) => {
               
         })
         .then(data => {
+          console.log(data)
         })
         .catch(err => console.log(err))
       }
@@ -86,7 +87,7 @@ const PageTwo = ({ onButtonClick, courseName }) => {
                                 />
                                 <label htmlFor="learnItem" className="form__label">Learn Item</label>
                                 <input type="hidden" required 
-                                {...register("course_id", { required: true })}
+                                {...register("course", { required: true })}
                                 />
                             </div>
                             {errors.title && errors.title?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Learn item is required.</p></div>}

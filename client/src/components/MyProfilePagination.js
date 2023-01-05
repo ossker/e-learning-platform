@@ -40,7 +40,7 @@ const MyProfilePagination = ({ data, title, pageLimit, dataLimit }) => {
           <div className='tabs'>
             <div className='tabs-body' >
               {getPaginatedData().map((course, idx) => (
-                <Course key={idx} id={course.id} owner={course.owner} description={course.description} name={course.name} image={course.course_image} updated_date={course.updated_date}
+                <Course key={idx} id={course.id} owner={course.owner} description={course.description} name={course.name} course_image={course.course_image} updated_date={course.updated_date}
                 actual_price={course.actual_price} discounted_price={course.discounted_price} is_free={course.is_free} language={course.language} topics={course.topics} tutorials={course.tutorials} edit={true}
                />
               ))}

@@ -15,6 +15,7 @@ import UserPage from './pages/UserPage';
 import EnrolledCoursePage from './pages/EnrolledCoursePage';
 import CoursesPage from './pages/CoursesPage';
 import Footer from './components/Footer';
+import EditCoursePage from './pages/EditCoursePage';
 
 const App = () => {
     return (
@@ -39,6 +40,9 @@ const App = () => {
                     </Route>
                     <Route path="/courses/:id">
                         <SingleCoursePage/>
+                    </Route>
+                    <Route path="/edit-course/:id">
+                        <EditCoursePage/>
                     </Route>
                     <Route path="/enrolled/:course_id/:user_id">
                         <EnrolledCoursePage/>

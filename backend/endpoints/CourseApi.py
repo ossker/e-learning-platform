@@ -79,14 +79,14 @@ class CourseResource(Resource):
         course_model = find_course_by_id(id)
         return course_model if course_model else []
 
-    @course_ns.marshal_with(course_model_request)
+    @course_ns.expect(course_model_request)
     @jwt_required()
     def put(self, id):
         """Update a course by id"""
         course_to_update = find_course_by_id(id)
         data = request.get_json()
-        update_course(course_to_update, data)
-        return course_to_update
+        msg = update_course(course_to_update, data)
+        return msg
 
     @jwt_required()
     def delete(self, id):
