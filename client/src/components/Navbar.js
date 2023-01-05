@@ -2,32 +2,8 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import { useAuth, logout } from '../auth'
 import styled from "styled-components";
-import { MdMenu, MdShoppingCart, MdPerson, MdAddCircle,MdPersonAddAlt1, MdLogin } from 'react-icons/md';
+import { MdPerson, MdAddCircle,MdPersonAddAlt1, MdLogin } from 'react-icons/md';
 
-
-const LoggedInLinks=()=>{
-    return(
-        <>
-            <li className="nav-item">
-                <Link className="nav-link active" to="/add_course">Add Course</Link>
-            </li>
-            
-        </>
-    )
-}
-
-const LoggedOutLinks=()=>{
-    return(
-        <>
-            <li className="nav-item">
-                <Link className="nav-link active" to="/signup">Sign Up</Link>
-            </li>
-            <li className="nav-item">
-                <Link className="nav-link active" to="/login">Log In</Link>
-            </li>
-        </>
-    )
-}
 
 const NavBar = () => {
 
@@ -41,21 +17,23 @@ const NavBar = () => {
                         Kur<span>siki</span>
                     </Link>
                     <div className="navbar-btn flex">
-                        <Link to="/login" className="cart-btn">
-                        <MdLogin/>
-                        </Link>
-                        <Link to="/signup" className="cart-btn">
-                            <MdPersonAddAlt1/>
-                        </Link>
-                        <Link to="/add-course" className="cart-btn">
-                            <MdAddCircle/>
-                        </Link>
-                        <Link to="/my-profile" className="cart-btn">
-                            <MdPerson/>
-                        </Link>
-                        <a className="cart-btn" href="/" onClick={()=>{logout()}}>Log Out</a>
-                        
-                        
+                        {logged?<>
+                            <Link to="/add-course" className="cart-btn">
+                                <MdAddCircle/>
+                            </Link>
+                            <Link to="/my-profile" className="cart-btn">
+                                <MdPerson/>
+                            </Link>
+                            <a className="cart-btn" href="/" onClick={()=>{logout()}}>Log Out</a>
+                        </>:
+                        <>
+                            <Link to="/login" className="cart-btn">
+                                <MdLogin/>
+                            </Link>
+                            <Link to="/signup" className="cart-btn">
+                                <MdPersonAddAlt1/>
+                            </Link>
+                        </>}
                     </div>
                 </div>
             </div>
