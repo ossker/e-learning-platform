@@ -17,7 +17,7 @@ import ErrorModal from '../components/ErrorModal';
 import TokenExpiredModal from '../components/TokenExpiredModal';
 import SuccessModal from '../components/SuccessModal';
 import { useForm } from 'react-hook-form';
-import { Accordion } from 'react-bootstrap';
+import { Accordion, Button, Modal } from 'react-bootstrap';
 import ReactPlayer from 'react-player';
 import AnimatedCheckmark, { MODES } from 'react-animated-checkmark'
 
@@ -37,8 +37,14 @@ const EditCoursePage = () => {
     const [student, setStudent] = useState()
     const history = useHistory()
     const [logged]=useAuth();
+    const [show, setShow] = useState(false)
 
-
+    const closeModal = () => {
+      setShow(false)
+  }
+  const showModal = () => {
+    setShow(true)
+}
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     const requestOptionsStudent ={
         method: 'GET',
@@ -180,6 +186,23 @@ useEffect(
   }
 
   const deleteCourse = (id) => {
+    fetch(`/course/course/${id}`, requestOptionsDelete)
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.msg == "Token has expired" | data.msg == "Not enough segments"){
+        closeModal()
+        logout();
+        setShowModalTokenExpired(true);
+      }
+      else if(data.status == 1){
+        history.push('/my-profile')
+      }
+      else{
+        closeModal()
+        setShowModalError(true)
+      }
+    })
+    .catch(err=>console.log(err))
 
   }
   
@@ -305,6 +328,38 @@ const [mode1, setMode1] = useState(MODES.LOADING)
     <SingleCourseWrapper>
       {showModalTokenExpired?<TokenExpiredModal/>:null}
       {showModalError?<ErrorModal/>:null}
+      
+      <Modal
+              size="lg"
+              show={show}
+              onHide={closeModal}
+              scrollable={true}
+              centered
+            >
+              <ModalWrapper>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <h3 className='wait'>
+                    Wait..
+                  </h3>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <h3 className='content'>
+                  Are you sure you want to delete the course?
+                </h3>
+                
+              </Modal.Body>
+              <Modal.Footer>
+                <ButtonWrapper>
+                  <Button variant="outline-dark" className='save__button' onClick={() => {deleteCourse(id)}}>
+                    Delete
+                  </Button>
+                  </ButtonWrapper>
+              </Modal.Footer>
+              </ModalWrapper>
+            </Modal>
+            
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
             <div className='course-category bg-white text-dark text-capitalize fw-6 fs-12 d-inline-block'>
@@ -394,7 +449,7 @@ const [mode1, setMode1] = useState(MODES.LOADING)
             <Link to="#" onClick={handleSubmit(updateCourse)} className='add-to-cart-btn d-inline-block fw-7 bg-purple'>
               Save
             </Link>
-            <Link to="#" onClick={()=>{deleteCourse()}} className='delete-btn d-inline-block'>
+            <Link to="#" onClick={()=>{showModal()}} className='delete-btn d-inline-block'>
               Delete
             </Link>
           </div>
@@ -499,6 +554,41 @@ const [mode1, setMode1] = useState(MODES.LOADING)
     </SingleCourseWrapper>
   )
 }
+const ButtonWrapper = styled.div`
+.save__button{
+  width: 150px;
+  height: 50px;
+  border: 0px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  background: #a024c9;
+  transition: 0.5s;
+  :hover{
+      background-color: #c21b4e;
+  }
+}
+`
+const ModalWrapper = styled.div`
+  .wait, .content{
+    color: #a024c9;
+    font-weight: 700;
+  }
+
+  .wait{
+    font-size: 2rem;
+    padding: 5px 0px 0px 20px;
+  }
+  .content{
+    font-size: 1.8rem;
+    padding: 20px 20px;
+  }
+
+  .save__button{
+
+  }
+`
+
 const BlackInputWrapper = styled.div`
 .error-response{
   display: flex;

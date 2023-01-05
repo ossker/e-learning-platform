@@ -8,6 +8,9 @@ from factories_implementation.CourseFactory import create_course
 from mappers.CourseMapper import course_entity_to_model
 from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course, \
     update_course, find_courses_by_owner_id, find_courses_by_logged_user, find_course_by_name
+from stores_implementation.EnrolledCourseStore import find_enrolled_courses_by_course_id, delete_many_enrolled_courses
+from stores_implementation.TopicStore import delete_many_topics_by_course_id
+from stores_implementation.TutorialStore import delete_many_tutorials_by_course_id
 
 course_ns = Namespace('course', description="A namespace for Course")
 
@@ -93,9 +96,13 @@ class CourseResource(Resource):
         """Delete a course by id"""
         course_to_delete = find_course_by_id(id)
         if course_to_delete:
+            enrolled_courses_to_delete = find_enrolled_courses_by_course_id(course_to_delete.id)
+            delete_many_enrolled_courses(enrolled_courses_to_delete)
+            delete_many_topics_by_course_id(course_to_delete.id)
+            delete_many_tutorials_by_course_id(course_to_delete.id)
             delete_course(course_to_delete)
-            return jsonify({"message": f"Course id: {id} deleted."})
-        return jsonify({"message": f"Course id: {id} does not exist."})
+            return {"status": 1}
+        return {"status": 1}
 
 
 @course_ns.route('/courses-owner/<int:id>')
@@ -115,6 +122,7 @@ class CourseResource(Resource):
         course_model = find_course_by_name(name)
         return course_model if course_model else []
 
+
 @course_ns.route('/my-courses')
 class CoursesOwnerResource(Resource):
     @jwt_required()
@@ -123,8 +131,6 @@ class CoursesOwnerResource(Resource):
         """Get logged user courses """
         courses = find_courses_by_logged_user()
         return courses if courses else []
-
-
 
 
 @course_ns.route('/course-image')
