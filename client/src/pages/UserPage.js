@@ -85,11 +85,6 @@ const UserPage = () => {
             .catch(err=>console.log(err))
         },[]
     );
-    console.log("id")
-    console.log(id)
-    console.log("actualUser.id")
-    console.log(actualUser & true)
-
 
     return(
         <>

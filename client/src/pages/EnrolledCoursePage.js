@@ -15,6 +15,8 @@ import LoginPage from './LoginPage'
 import HomePage from './HomePage';
 
 const LoggedInUser = (course_id, user_id) => {
+  user_id = course_id.user_id
+  course_id = course_id.course_id
   const [category, setCategory] = useState()
     const [owner, setOwner] = useState()
     const [course, setCourse] = useState()
@@ -101,10 +103,9 @@ useEffect(
         .catch(err=>console.log(err))
     },[]
 );
-
   return (
     <>
-    {((actualUser?.id==user_id) & enrolledCourse)?
+    {enrolledCourse && actualUser?.id==user_id?
     <SingleCourseWrapper>
         {showModalTokenExpired?<TokenExpiredModal/>:null}
       <div className='course-intro mx-auto grid'>
@@ -190,6 +191,7 @@ useEffect(
 const EnrolledCoursePage = () => {
     const {course_id, user_id} = useParams();
     const [logged]=useAuth();
+    
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     if(!token){
       logout()
