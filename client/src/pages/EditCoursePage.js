@@ -550,7 +550,10 @@ const [mode1, setMode1] = useState(MODES.LOADING)
 const EditCoursePage = () => {
     const {id} = useParams();
     const [logged]=useAuth();
-
+    const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    if(!token){
+      logout()
+    }
   return (
     <>
     {logged?<LoggedInUser id={id}/>:<LoginPage/>}

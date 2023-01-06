@@ -4,7 +4,7 @@ import PageTwo from '../components/PageTwo';
 import PageOne from '../components/PageOne';
 import PageThree from '../components/PageThree';
 import styled from 'styled-components';
-import { useAuth } from '../auth';
+import {logout, useAuth } from '../auth';
 import LoginPage from './LoginPage'
 
 const LoggedInUser = () => {
@@ -50,6 +50,10 @@ const LoggedInUser = () => {
 
 const AddCoursePage = () => {
   const [logged]=useAuth();
+  const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    if(!token){
+      logout()
+    }
   return (
     <>
       {logged?<LoggedInUser/>:<LoginPage/>}

@@ -190,6 +190,10 @@ useEffect(
 const EnrolledCoursePage = () => {
     const {course_id, user_id} = useParams();
     const [logged]=useAuth();
+    const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    if(!token){
+      logout()
+    }
   return (
     <>
     {logged?<LoggedInUser course_id={course_id} user_id={user_id}/>:<LoginPage/>}

@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { hero_images, user_images } from "../utils/images";
 import {BsLinkedin, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
 import MyProfileCoursesList from '../components/MyProfileCoursesList'
-import {useAuth } from '../auth';
+import {logout, useAuth } from '../auth';
 import TokenExpiredModal from '../components/TokenExpiredModal'
 import {MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
 import EnrolledCoursesList from '../components/EnrolledCoursesList'
@@ -301,6 +301,10 @@ const uploadFile = async (e) => {
 const MyProfilePage = () => {
     const [logged]=useAuth();
     const {id} = useParams();
+    const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    if(!token){
+      logout()
+    }
     return(
         <>
             {logged?<LoggedInUser id={id}/>:<LoginPage/>}
