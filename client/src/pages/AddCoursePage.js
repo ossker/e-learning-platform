@@ -4,9 +4,10 @@ import PageTwo from '../components/PageTwo';
 import PageOne from '../components/PageOne';
 import PageThree from '../components/PageThree';
 import styled from 'styled-components';
+import { useAuth } from '../auth';
+import LoginPage from './LoginPage'
 
-
-const AddCoursePage = () => {
+const LoggedInUser = () => {
   const [page, setPage] = useState("pageone");
   const [courseName, setCourseName] = useState();
   const nextPage = (page, course_name) => {
@@ -32,7 +33,8 @@ const AddCoursePage = () => {
         setPage("1");
     }
   };
-  return (
+
+  return(
     <BarWrapper>
       <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
       {
@@ -43,6 +45,15 @@ const AddCoursePage = () => {
         }[page]
       }
     </BarWrapper>
+  )
+}
+
+const AddCoursePage = () => {
+  const [logged]=useAuth();
+  return (
+    <>
+      {logged?<LoggedInUser/>:<LoginPage/>}
+    </>
   )
 }
 
