@@ -5,7 +5,7 @@ import StarRating from '../components/StarRating';
 import {MdInfo} from "react-icons/md";
 import {TbWorld} from "react-icons/tb";
 import {FaShoppingCart} from "react-icons/fa";
-import {RiClosedCaptioningFill} from "react-icons/ri";
+import {RiTimeLine} from "react-icons/ri";
 import {BiCheck} from "react-icons/bi";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
@@ -174,7 +174,7 @@ const enrollCourse = () => {
                 <span className='fs-14 course-info-txt fw-5'>{course?.language}</span>
               </li>
               <li className='flex'>
-                <span><RiClosedCaptioningFill /></span>
+                <span><RiTimeLine /></span>
                 <span className='fs-14 course-info-txt fw-5'>{duration}</span>
               </li>
             </ul>

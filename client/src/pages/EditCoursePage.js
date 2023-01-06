@@ -4,7 +4,7 @@ import styled from "styled-components";
 import StarRating from '../components/StarRating';
 import {MdCancel, MdInfo, MdOutlineCancel, MdReportGmailerrorred} from "react-icons/md";
 import {TbWorld} from "react-icons/tb";
-import {RiAddCircleFill, RiClosedCaptioningFill} from "react-icons/ri";
+import {RiAddCircleFill, RiTimeLine} from "react-icons/ri";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
 import { useCategories } from '../context/categories_context';
@@ -421,7 +421,7 @@ const [mode1, setMode1] = useState(MODES.LOADING)
                 <span className='fs-14 course-info-txt fw-5'>{course?.language}</span>
               </li>
               <li className='flex'>
-                <span><RiClosedCaptioningFill /></span>
+                <span><RiTimeLine /></span>
                 <span className='fs-14 course-info-txt fw-5'>{duration}</span>
               </li>
             </ul>
