@@ -4,23 +4,23 @@ import styled from "styled-components";
 import StarRating from '../components/StarRating';
 import {MdInfo} from "react-icons/md";
 import {TbWorld} from "react-icons/tb";
-import {FaShoppingCart} from "react-icons/fa";
-import {RiClosedCaptioningFill, RiContactsBookLine} from "react-icons/ri";
-import {BiCheck} from "react-icons/bi";
+import {RiClosedCaptioningFill} from "react-icons/ri";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
 import Accordion from 'react-bootstrap/Accordion';
 import ReactPlayer from 'react-player'
 import { logout, useAuth } from '../auth';
 import TokenExpiredModal from '../components/TokenExpiredModal';
+import LoginPage from './LoginPage'
+import HomePage from './HomePage';
 
-const EnrolledCoursePage = () => {
-    const {course_id, user_id} = useParams();
-    const [category, setCategory] = useState()
+const LoggedInUser = (course_id, user_id) => {
+  const [category, setCategory] = useState()
     const [owner, setOwner] = useState()
     const [course, setCourse] = useState()
     const [enrolledCourse, setEnrolledCourse] = useState()
     const [duration, setDuration] = useState()
+    const [actualUser, setActualUser] = useState()
 
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     const requestOptions ={
@@ -30,6 +30,18 @@ const EnrolledCoursePage = () => {
             'Authorization': `Bearer ${JSON.parse(token)}`
         }
     }
+
+    useEffect(
+      ()=>{
+          fetch('/auth/actual-user', requestOptions)
+          .then(res=>res.json())
+          .then(data=>{
+              setActualUser(data)
+          })
+          .catch(err=>console.log(err))
+      },[]
+  );
+
     useEffect(
       ()=>{
           fetch(`/category/categoryCourse/${course_id}`)
@@ -80,8 +92,6 @@ useEffect(
         fetch(`/enrolled_course/enrolled_course/${course_id}/${user_id}`, requestOptions)
         .then(res=>res.json())
         .then(data=>{
-            console.log("DEJTA")
-            console.log(data)
             if(data.msg == "Token has expired"){
                 logout();
                 setShowModalTokenExpired(true);
@@ -91,9 +101,10 @@ useEffect(
         .catch(err=>console.log(err))
     },[]
 );
-console.log("course?.tutorials")
-    console.log(course?.tutorials)
+
   return (
+    <>
+    {((actualUser?.id==user_id) & enrolledCourse)?
     <SingleCourseWrapper>
         {showModalTokenExpired?<TokenExpiredModal/>:null}
       <div className='course-intro mx-auto grid'>
@@ -169,7 +180,20 @@ console.log("course?.tutorials")
           </ul>
         </div>
       </div>
-    </SingleCourseWrapper>
+    </SingleCourseWrapper>:<HomePage/>}
+    </>
+    
+  )
+}
+
+
+const EnrolledCoursePage = () => {
+    const {course_id, user_id} = useParams();
+    const [logged]=useAuth();
+  return (
+    <>
+    {logged?<LoggedInUser course_id={course_id} user_id={user_id}/>:<LoginPage/>}
+    </>
   )
 }
 

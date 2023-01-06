@@ -8,7 +8,6 @@ import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import AddCoursePage from './pages/AddCoursePage';
-import UpdateCoursePage from './components/UpdateCourse';
 import SingleCoursePage from './pages/SingleCoursePage';
 import MyProfilePage from './pages/MyProfilePage';
 import UserPage from './pages/UserPage';
@@ -34,9 +33,6 @@ const App = () => {
                     </Route>
                     <Route path="/my-profile">
                         <MyProfilePage/>
-                    </Route>
-                    <Route path="/update-course/:id">
-                        <UpdateCoursePage/>
                     </Route>
                     <Route path="/courses/:id">
                         <SingleCoursePage/>
