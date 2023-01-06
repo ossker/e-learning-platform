@@ -4,22 +4,22 @@ import styled from "styled-components";
 import { hero_images, user_images } from "../utils/images";
 import {BsLinkedin, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
 import UserCourseList from "../components/UserCourseList";
-const UserPage = () => {
-    const {id} = useParams();
-    const [user, setUser] = useState('')
-    useEffect(()=>{
+import MyProfilePage from "./MyProfilePage";
 
-      fetch(`/auth/user/${id}`)
-        .then(res=>res.json())
-        .then(data=>{
-          setUser(data)
-        })
-        .catch(err=>console.log(err))
+const AnotherUser = (id) => {
+  const [user, setUser] = useState('')
+  id=id.id
+  useEffect(()=>{
+    fetch(`/auth/user/${id}`)
+      .then(res=>res.json())
+      .then(data=>{
+        setUser(data)
+      })
+      .catch(err=>console.log(err))
 
-    }, [])
-
-    return(
-        <UserPageWrapper>
+  }, [])
+  return (
+    <UserPageWrapper>
             <div className="header__wrapper">
                 <header>
                 </header>
@@ -56,46 +56,48 @@ const UserPage = () => {
                 </div>
             </div>
         </UserPageWrapper>
+  )
+
+}
+
+const UserPage = () => {
+    const {id} = useParams();
+    
+    const [actualUser, setActualUser] = useState('')
+    
+
+    const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    const requestOptions ={
+        method: 'GET',
+        headers: {
+            'content-type':'application/json',
+            'Authorization': `Bearer ${JSON.parse(token)}`
+        }
+    }
+
+    useEffect(
+        ()=>{
+            fetch('/auth/actual-user', requestOptions)
+            .then(res=>res.json())
+            .then(data=>{
+                setActualUser(data)
+            })
+            .catch(err=>console.log(err))
+        },[]
+    );
+    console.log("id")
+    console.log(id)
+    console.log("actualUser.id")
+    console.log(actualUser & true)
+
+
+    return(
+        <>
+        {(id == actualUser.id)?<MyProfilePage/>:<AnotherUser id={id}/>}
+        </>
     )
 }
 
-const ButtonsWrapper = styled.div`
-.item-btns{
-    justify-self: flex-start;
-    padding: 4px 8px 30px 18px;
-    margin-top: auto;
-
-    .item-btn{
-      font-size: 15px;
-      display: inline-block;
-      padding: 6px 16px;
-      font-weight: 700;
-      transition: var(--transition);
-      white-space: nowrap;
-
-      &.see-details-btn{
-        background-color: transparent;
-        border: 1px solid var(--clr-black);
-        margin-right: 5px;
-
-        &:hover{
-          background-color: rgba(0, 0, 0, 0.9);
-          color: var(--clr-white);
-        }
-      }
-
-      &.add-to-cart-btn{
-        background: rgba(0, 0, 0, 0.9);
-        color: var(--clr-white);
-        border: 1px solid rgba(0, 0, 0, 0.9);
-        
-        &:hover{
-          background-color: transparent;
-          color: rgba(0, 0, 0, 0.9);
-        }
-      }
-    }
-  }`
 
 const UserPageWrapper = styled.div`
 body {
