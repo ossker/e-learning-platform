@@ -32,7 +32,6 @@ const UserPage = () => {
                     </div>
                     <h2>{user?.username}</h2>
                     <p>{user?.first_name} {user?.last_name}</p>
-                    <p>{user?.email}</p>
 
                     <ul className="about">
                         <li><span>0</span>Followers</li>

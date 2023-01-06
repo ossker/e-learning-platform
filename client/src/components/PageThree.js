@@ -23,7 +23,7 @@ const PageThree = (courseName) => {
             .then(res=>res.json())
             .then(data=>{
                 setCourse(data)
-                setValue("course_id", data.id);
+                setValue("course", data.id);
             }) 
             .catch(err=>console.log(err))
         },[]
@@ -103,7 +103,7 @@ const PageThree = (courseName) => {
                               {errors.video && errors.video?.type ==="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">URL is required.</p></div>}
                               {errors.video && errors.video?.type !=="required" && <div className="error-section"><MdReportGmailerrorred className="icon"/> <p className="error">Invalid URL.</p></div>}
                               <input type="hidden" required 
-                                  {...register("course_id", { required: true })}
+                                  {...register("course", { required: true })}
                               />
                           </BlackInputWrapper>
                       </ul>

@@ -7,7 +7,7 @@ const MyProfileCoursesList = () => {
         <UserCourseListWrapper>
             <div className='container'>
                 <div className='courses-list-top'>
-                    <p>Uploaded courses.</p>
+                    <p>Uploaded courses</p>
                 </div>
                 <MyProfileTabs/>
             </div>

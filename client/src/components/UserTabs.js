@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
 import { useCourses } from '../context/courses_context';
 import Course from "./Course";
@@ -6,8 +7,7 @@ import Pagination from './Pagination';
 
 const UserTabs = (id) => {
     const [courses, setCourses] = useState()
-    console.log("IDDD")
-    console.log(id.id.id)
+
     useEffect(() => {
         fetch(`/course/courses-owner/${id.id.id}`).
         then(data => data.json()).
@@ -17,16 +17,15 @@ const UserTabs = (id) => {
   return (
     <UserTabsWrapper>
       {courses?.length > 0 ? (
-          
           <Pagination
             data={courses}
             pageLimit={5}
             dataLimit={3}
           />
-        
           ) : (
-          <h1>No Courses to display</h1>
+            <p className='not-uploaded'><MdInfoOutline/>Thus user has not uploaded any course yet.</p>
       )}
+      <div className='mt-4'/>
     </UserTabsWrapper>
     
   )

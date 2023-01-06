@@ -7,7 +7,7 @@ const EnrolledCoursesList = () => {
         <UserCourseListWrapper>
             <div className='container'>
                 <div className='courses-list-top'>
-                    <p>Enrolled courses.</p>
+                    <p>Enrolled courses</p>
                 </div>
                 <EnrolledTabs/>
             </div>
