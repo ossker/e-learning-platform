@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import { useAuth, logout } from '../auth'
 import styled from "styled-components";
-import { MdPerson, MdAddCircle,MdPersonAddAlt1, MdLogin } from 'react-icons/md';
+import { MdPerson, MdPersonAddAlt1, MdLogin, MdOutlineLogout, MdAddCircleOutline } from 'react-icons/md';
 
 
 const NavBar = () => {
@@ -19,12 +19,12 @@ const NavBar = () => {
                     <div className="navbar-btn flex">
                         {logged?<>
                             <Link to="/add-course" className="cart-btn">
-                                <MdAddCircle/>
+                                <MdAddCircleOutline/>
                             </Link>
                             <Link to="/my-profile" className="cart-btn">
                                 <MdPerson/>
                             </Link>
-                            <a className="cart-btn" href="/" onClick={()=>{logout()}}>Log Out</a>
+                            <a className="cart-btn" href="/" onClick={()=>{logout()}}><MdOutlineLogout/></a>
                         </>:
                         <>
                             <Link to="/login" className="cart-btn">
