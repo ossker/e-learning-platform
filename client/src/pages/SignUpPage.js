@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import React, { useState } from 'react'
 import { useForm }  from 'react-hook-form'
 import {  MdReportGmailerrorred, MdCancel } from 'react-icons/md';
+import { useAuth } from '../auth';
+import HomePage from './HomePage'
 
-const Signup = () => {
+const LoggedInUser = () => {
     const {register, watch, handleSubmit, reset, formState:{errors}} = useForm();
     const [serverResponse, setServerResponse] = useState("");
     const [showError, setShowError] = useState();
@@ -58,9 +60,8 @@ const Signup = () => {
         }
     }
 
-
     return (
-        <>
+<>
             <section className="vh-100" style={{ backgroundColor: "rgb(179, 20, 91)" }}>
                 <div className="container h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
@@ -171,6 +172,15 @@ const Signup = () => {
                     </div>
                 </div>
             </section>
+        </>
+    )
+}
+
+const Signup = () => {
+    const [logged]=useAuth();
+    return (
+        <>
+            {!logged?<LoggedInUser/>:<HomePage/>}
         </>
     )
 }
