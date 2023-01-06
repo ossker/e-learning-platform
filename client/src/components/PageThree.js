@@ -1,15 +1,13 @@
-import React, {useEffect, useState, useRef} from 'react';
-import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
-import { MdArrowForwardIos, MdKeyboardArrowRight, MdReportGmailerrorred } from 'react-icons/md';
-import { RiAddCircleFill, RiContactsBookLine } from 'react-icons/ri';
+import React, {useEffect, useState} from 'react';
+import { MdReportGmailerrorred } from 'react-icons/md';
+import { RiAddCircleFill} from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { logout, useAuth } from '../auth';
+import { logout} from '../auth';
 import { useForm } from 'react-hook-form';
 import AnimatedCheckmark, { MODES } from 'react-animated-checkmark'
 import TokenExpiredModal from './TokenExpiredModal';
 import ErrorModal from './ErrorModal';
-import ReactPlayer from 'react-player'
 
 const PageThree = (courseName) => {
     const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();

@@ -25,7 +25,7 @@ const Footer = () => {
             <h6>Categories</h6>
             <ul className="footer-links">
                 {categories?.map((category, idx) => (
-                    <li><Link to = {`/category/${category.id}`}>{category.name}</Link></li>
+                    <li key={idx}><Link to = {`/category/${category.id}`}>{category.name}</Link></li>
                 ))
                 }
             </ul>

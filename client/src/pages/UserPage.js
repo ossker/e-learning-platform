@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { hero_images, user_images } from "../utils/images";
-import { course_images } from "../utils/images";
 import {BsLinkedin, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
 import UserCourseList from "../components/UserCourseList";
 const UserPage = () => {

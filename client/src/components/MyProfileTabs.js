@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
-import { useCourses } from '../context/courses_context';
-import Course from "./Course";
 import MyProfilePagination from './MyProfilePagination';
 
 const MyProfileTabs = () => {

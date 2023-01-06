@@ -1,11 +1,11 @@
-import React, {useEffect, useState, useRef} from 'react';
-import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
-import { MdArrowForwardIos, MdKeyboardArrowRight, MdReportGmailerrorred } from 'react-icons/md';
+import React, {useEffect, useState} from 'react';
+import { FaArrowRight} from 'react-icons/fa';
+import { MdReportGmailerrorred } from 'react-icons/md';
 import { RiAddCircleFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SuccessModal from './SuccessModal';
-import { logout, useAuth } from '../auth';
+import { logout} from '../auth';
 import { useForm } from 'react-hook-form';
 import AnimatedCheckmark, { MODES } from 'react-animated-checkmark'
 import TokenExpiredModal from './TokenExpiredModal';

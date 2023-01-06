@@ -5,13 +5,11 @@ import React, { useState } from 'react'
 import { useForm }  from 'react-hook-form'
 import {  MdReportGmailerrorred, MdCancel } from 'react-icons/md';
 import { login, useAuth } from '../auth'
+import HomePage from "./HomePage";
 
-const Login = () => {
-
+const NotLoggedInUser = () => {
     const {register, watch, handleSubmit, reset, formState:{errors}} = useForm();
     const history = useHistory();
-    const [logged]=useAuth();
-    const [serverResponse, setServerResponse] = useState("");
     const [showError, setShowError] = useState();
 
     const loginUser = (data) => {
@@ -26,14 +24,12 @@ const Login = () => {
         fetch('/auth/login', requestOptions)
         .then(res=>res.json())
         .then(data=>{
-            console.log(data)
             if(data.access_token){
                 login(data.access_token)
                 reset()
                 history.push('/')
             }
             else{
-                setServerResponse(data.message)
                 setShowError(true);
             }
         })
@@ -103,6 +99,16 @@ const Login = () => {
                     </div>
                 </div>
             </section>
+        </>
+    )
+}
+
+const Login = () => {
+    const [logged]=useAuth();
+
+    return(
+        <>
+        {!logged?<NotLoggedInUser/>:<HomePage/>}
         </>
     )
 }

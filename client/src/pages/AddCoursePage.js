@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import MultiStepProgressBar from '../components/MultiStepProgressBar';
 import PageTwo from '../components/PageTwo';
 import PageOne from '../components/PageOne';

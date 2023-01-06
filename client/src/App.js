@@ -19,7 +19,7 @@ import EditCoursePage from './pages/EditCoursePage';
 const App = () => {
     return (
         <Router>
-            <div style={{"min-height":"61.1vh"}}>
+            <div style={{"minHeight":"61.1vh"}}>
                 <NavBar/>
                 <Switch>
                     <Route path="/add-course">

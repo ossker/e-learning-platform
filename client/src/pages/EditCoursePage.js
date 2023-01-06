@@ -237,7 +237,6 @@ useEffect(
 
   const createTutorial = (data) => {
     data["course"] = id;
-    console.log(data);
         
         const requestOptions = {
           method: 'POST',
@@ -282,7 +281,6 @@ const [mode1, setMode1] = useState(MODES.LOADING)
   const updateCourse = (data) => {
     
     data["id"] = id;
-    console.log(data)
     const requestOptionsUpdate={
       method:'PUT',
         headers:{
@@ -295,8 +293,6 @@ const [mode1, setMode1] = useState(MODES.LOADING)
     fetch(`/course/course/${id}`, requestOptionsUpdate)
     .then(res=>res.json())
     .then(data=>{
-      console.log("data")
-      console.log(data)
       if(data.status == 1){
         const reload =window.location.reload()
         reload()

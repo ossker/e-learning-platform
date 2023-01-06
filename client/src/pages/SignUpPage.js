@@ -38,12 +38,8 @@ const LoggedInUser = () => {
             .then(res=>res.json())
             .then(data=>{
                 setServerResponse(data.message)
-                
             })
             .catch(err=>console.log(err))
-            
-            console.log("serverResponse")
-                console.log(serverResponse)
                 if(serverResponse=="User created successfully.")
                 {
                     reset();
@@ -52,8 +48,6 @@ const LoggedInUser = () => {
                 else{
                     setShowError(true);
                 }
-                console.log(serverResponse)
-            
         }
         else {
             alert("Passwords do not match.")

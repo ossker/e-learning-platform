@@ -1,30 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import {Link, Redirect, useParams} from 'react-router-dom'
-import Course from '../components/Course'
-import { Modal, Form, Button } from 'react-bootstrap'
+import {Link, useParams} from 'react-router-dom'
+import { Modal, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import LoginPage from './LoginPage'
-import { useHistory } from 'react-router-dom'
 import styled from "styled-components";
 import { hero_images, user_images } from "../utils/images";
-import { course_images } from "../utils/images";
 import {BsLinkedin, BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
-import UserCourseList from "../components/UserCourseList";
 import MyProfileCoursesList from '../components/MyProfileCoursesList'
-import { logout, useAuth } from '../auth';
+import {useAuth } from '../auth';
 import TokenExpiredModal from '../components/TokenExpiredModal'
-import { RiContactsBookLine } from 'react-icons/ri'
-import {MdConstruction, MdInfo ,MdCancel, MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
+import {MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
 import EnrolledCoursesList from '../components/EnrolledCoursesList'
 
 const LoggedInUser=(id)=>{
-    const [courses, setCourses] = useState([]);
     const [user, setUser] = useState();
-    const history = useHistory()
     const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();
     const [showModalTokenExpired, setShowModalTokenExpired] = useState(false);
-    const [showModalError, setShowModalError] = useState(false);
-    const [showEditProfileModal, setShowEditProfileModal] = useState(false);
 
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     const requestOptions ={
@@ -34,22 +25,6 @@ const LoggedInUser=(id)=>{
             'Authorization': `Bearer ${JSON.parse(token)}`
         }
     }
-
-    useEffect(
-        ()=>{
-            fetch('/course/my-courses', requestOptions)
-            .then(res=>res.json())
-            .then(data=>{
-              if(data.msg == "Token has expired"){
-                logout();
-                setShowModalTokenExpired(true);
-              }else{
-                setCourses(data)
-              }
-            })
-            .catch(err=>console.log(err))
-        },[]
-    );
 
 
     useEffect(
@@ -63,7 +38,6 @@ const LoggedInUser=(id)=>{
         },[]
     );
 
-    console.log(user)
     const [show, setShow] = useState(false)
     const [imageName, setImageName] = useState('')
   const [imageError, setImageError] = useState(false)
