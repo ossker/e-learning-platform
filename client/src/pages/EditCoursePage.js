@@ -4,41 +4,36 @@ import styled from "styled-components";
 import StarRating from '../components/StarRating';
 import {MdCancel, MdInfo, MdOutlineCancel, MdReportGmailerrorred} from "react-icons/md";
 import {TbWorld} from "react-icons/tb";
-import {FaShoppingCart} from "react-icons/fa";
 import {RiAddCircleFill, RiClosedCaptioningFill} from "react-icons/ri";
-import {BiCheck} from "react-icons/bi";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
-import { useCourses } from '../context/courses_context';
 import { useCategories } from '../context/categories_context';
-import { useUsers } from '../context/users_context';
 import { logout, useAuth } from '../auth';
 import ErrorModal from '../components/ErrorModal';
 import TokenExpiredModal from '../components/TokenExpiredModal';
-import SuccessModal from '../components/SuccessModal';
 import { useForm } from 'react-hook-form';
 import { Accordion, Button, Modal } from 'react-bootstrap';
 import ReactPlayer from 'react-player';
 import AnimatedCheckmark, { MODES } from 'react-animated-checkmark'
+import LoginPage from './LoginPage'
+import HomePage from './HomePage';
 
-const EditCoursePage = () => {
-    const {id} = useParams();
-    const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();
+const LoggedInUser = (id) => {
+  id=id.id
+  const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();
     const {register:register1, watch:watch1, handleSubmit:handleSubmit1, setValue:setValue1, reset:reset1, formState:{errors:errors1}} = useForm();
     const {register:register2, watch:watch2, handleSubmit:handleSubmit2, setValue:setValue2, reset:reset2, formState:{errors:errors2}} = useForm();
     const [category, setCategory] = useState()
-    const [user, setUser] = useState()
+    const [owner, setOwner] = useState()
     const [course, setCourse] = useState()
     const [duration, setDuration] = useState()
     const [showModalTokenExpired, setShowModalTokenExpired] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
     const [showErrorNameTaken, setShowErrorNameTaken] = useState(false)
     const categories = useCategories();
-    const [student, setStudent] = useState()
+    const [actualUser, setActualUser] = useState()
     const history = useHistory()
-    const [logged]=useAuth();
     const [show, setShow] = useState(false)
-
     const closeModal = () => {
       setShow(false)
   }
@@ -59,7 +54,7 @@ const EditCoursePage = () => {
             fetch('/auth/actual-user', requestOptionsStudent)
             .then(res=>res.json())
             .then(data=>{
-                setStudent(data)
+                setActualUser(data)
             })
             .catch(err=>console.log(err))
         },[]
@@ -100,7 +95,7 @@ const EditCoursePage = () => {
           fetch(`/auth/userCourse/${id}`)
           .then(res=>res.json())
           .then(data=>{
-              setUser(data)
+              setOwner(data)
           })
           .catch(err=>console.log(err))
       },[]
@@ -208,7 +203,6 @@ useEffect(
   
   const createTopic = (data) => {
     data["course"] = id;
-    console.log(data);
 
     const requestOptionsCreateTopic = {
       method: 'POST',
@@ -323,9 +317,9 @@ const [mode1, setMode1] = useState(MODES.LOADING)
    
     
   }
-
   return (
-    <SingleCourseWrapper>
+    <>
+    {(actualUser?.id == owner?.id)?<SingleCourseWrapper>
       {showModalTokenExpired?<TokenExpiredModal/>:null}
       {showModalError?<ErrorModal/>:null}
       
@@ -551,7 +545,20 @@ const [mode1, setMode1] = useState(MODES.LOADING)
           </div>
         </div>
       </div>
-    </SingleCourseWrapper>
+    </SingleCourseWrapper>:<HomePage/>}
+    </>
+
+  )
+}
+
+const EditCoursePage = () => {
+    const {id} = useParams();
+    const [logged]=useAuth();
+
+  return (
+    <>
+    {logged?<LoggedInUser id={id}/>:<LoginPage/>}
+    </>
   )
 }
 const ButtonWrapper = styled.div`
