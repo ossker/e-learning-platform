@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
-import { useCourses } from '../context/courses_context';
-import Course from "./Course";
 import MyProfilePagination from './MyProfilePagination';
 
 const MyProfileTabs = () => {
     const [courses, setCourses] = useState([]);
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+
     const requestOptions ={
         method: 'GET',
         headers: {
@@ -34,7 +33,6 @@ const MyProfileTabs = () => {
             pageLimit={5}
             dataLimit={3}
           />
-        
           ) : (
           <p className='not-uploaded'><MdInfoOutline/> You have not uploaded any courses. 
           Try via the button above.</p>

@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import MultiStepProgressBar from '../components/MultiStepProgressBar';
 import PageTwo from '../components/PageTwo';
 import PageOne from '../components/PageOne';
 import PageThree from '../components/PageThree';
 import styled from 'styled-components';
+import {logout, useAuth } from '../auth';
+import LoginPage from './LoginPage'
 
-
-const AddCoursePage = () => {
+const LoggedInUser = () => {
   const [page, setPage] = useState("pageone");
   const [courseName, setCourseName] = useState();
   const nextPage = (page, course_name) => {
@@ -32,7 +33,8 @@ const AddCoursePage = () => {
         setPage("1");
     }
   };
-  return (
+
+  return(
     <BarWrapper>
       <MultiStepProgressBar page={page} onPageNumberClick={nextPageNumber} />
       {
@@ -43,6 +45,19 @@ const AddCoursePage = () => {
         }[page]
       }
     </BarWrapper>
+  )
+}
+
+const AddCoursePage = () => {
+  const [logged]=useAuth();
+  const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
+    if(!token){
+      logout()
+    }
+  return (
+    <>
+      {logged?<LoggedInUser/>:<LoginPage/>}
+    </>
   )
 }
 

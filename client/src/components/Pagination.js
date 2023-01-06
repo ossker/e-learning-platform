@@ -2,8 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import Course from './Course';
 import { MdInfoOutline, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-import { FaRegFrow } from "react-icons/fa";
-import { BsEmojiAngry, BsEmojiFrown } from 'react-icons/bs';
 
 const Pagination = ({ data, title, pageLimit, dataLimit }) => {
     const [pages] = useState(Math.ceil(data.length / dataLimit));

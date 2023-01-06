@@ -1,17 +1,11 @@
-import React, {useEffect, useState, useRef} from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, {useState} from 'react';
 import styled from "styled-components";
-import StarRating from './StarRating';
-import {MdConstruction, MdInfo, MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
-import {TbWorld} from "react-icons/tb";
-import {FaShoppingCart} from "react-icons/fa";
-import {RiClosedCaptioningFill, RiAddCircleFill, RiFolderUploadFill} from "react-icons/ri";
-import {BiCheck} from "react-icons/bi";
+import {MdOutlineCheckCircleOutline, MdRemoveCircleOutline, MdReportGmailerrorred} from "react-icons/md";
+import {RiAddCircleFill} from "react-icons/ri";
 import {Link} from "react-router-dom";
 import { course_images } from "../utils/images";
-import Hero from './Hero';
 import { useForm } from 'react-hook-form';
-import { logout, useAuth } from '../auth';
+import { logout} from '../auth';
 import { useCategories } from '../context/categories_context';
 import TokenExpiredModal from './TokenExpiredModal';
 import ErrorModal from './ErrorModal';
@@ -20,8 +14,6 @@ import ErrorModal from './ErrorModal';
 const PageOne = ({ onButtonClick }) => {
   const categories = useCategories();
   const {register, watch, handleSubmit, setValue, reset, formState:{errors}} = useForm();
-  const history = useHistory();
-  const [logged]=useAuth();
   
   const [imageName, setImageName] = useState('')
   const [imageError, setImageError] = useState(false)

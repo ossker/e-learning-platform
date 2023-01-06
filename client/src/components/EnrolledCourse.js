@@ -5,9 +5,6 @@ import StarRating from './StarRating';
 import { course_images } from "../utils/images";
 
 const EnrolledCourse = (props) => {
-    console.log("props")
-    console.log(props)
-
     const {id,student_id, is_finished, description, name, owner, image, updated_date, actual_price, discounted_price, is_free, language, topics, edit} = props;
     
     const [user, setUser] = useState('')

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
@@ -7,7 +7,6 @@ const TokenExpiredModal = () => {
 
   return (
     <>
-        
             <Modal
                 show={true}
                 backdrop="static"

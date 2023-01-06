@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useEffect } from 'react';
 import { MdInfoOutline } from 'react-icons/md';
-import { RiContactsBookLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 import styled from "styled-components";
 import Course from "../components/Course";
@@ -18,7 +16,6 @@ const CoursesPage = () => {
       fetch(`/category/category/${category_id.category}`)
       .then(res=>res.json())
       .then(data=>{
-          console.log(data)
           setCategory(data)
       })
       .catch(err=>console.log(err))
