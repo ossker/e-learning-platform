@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { MdInfoOutline } from 'react-icons/md';
 import styled from "styled-components";
 import { useCategories } from '../context/categories_context';
 import { useCourses } from '../context/courses_context';
@@ -34,7 +35,7 @@ const Tabs = () => {
           />
         
           ) : (
-          <h1>No Courses to display</h1>
+            <div className='not-uploaded mt-4'><p><MdInfoOutline className='icon'/> No courses to display</p></div>
       )}
 
       </div>
