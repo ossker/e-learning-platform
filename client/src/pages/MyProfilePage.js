@@ -32,7 +32,12 @@ const LoggedInUser=(id)=>{
             fetch('/auth/actual-user', requestOptions)
             .then(res=>res.json())
             .then(data=>{
+              if(data.msg == "Token has expired" | data.msg == "Not enough segments"){
+                logout();
+                setShowModalTokenExpired(true);
+              }else{
                 setUser(data)
+              }
             })
             .catch(err=>console.log(err))
         },[]
