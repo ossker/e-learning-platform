@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { MdInfoOutline } from 'react-icons/md';
+import { MdInfoOutline, MdSearch } from 'react-icons/md';
 import styled from "styled-components";
 import { useCategories } from '../context/categories_context';
 import { useCourses } from '../context/courses_context';
@@ -9,10 +9,17 @@ const Tabs = () => {
   const [activeTab, setActiveTab] = useState('');
   const courses=useCourses();
   const categories=useCategories();
+  const [searchInput, setSearchInput] = useState("");
 
   const tabHandler = (category_id) => {
     setActiveTab(category_id);
   }
+
+  const searchHandler = (e) => {
+    e.preventDefault();
+    setSearchInput(e.target.value.toLowerCase());
+  }
+
   return (
     <TabsWrapper>
       <div className='tabs'>
@@ -24,12 +31,29 @@ const Tabs = () => {
             </li>
           ))
           }
+          <SearchWrapper>
+          <form className="Search">
+            <input
+              type="text"
+              placeholder="SEARCH..."
+              onChange={searchHandler}
+              value={searchInput} 
+              className="Search-box"
+              id="Search-box"
+            />
+            <label className="Search-label" htmlFor="Search-box"><MdSearch/></label>
+            </form>
+          </SearchWrapper>
         </ul>
 
         {courses?.length > 0 ? (
           
           <Pagination
-            data={activeTab?courses.filter(course => course.category_id == activeTab):courses}
+            data={activeTab?courses.filter(course => course.category_id == activeTab).filter((course) => {
+              return course.name.toLowerCase().match(searchInput);
+          }):courses.filter((course) => {
+              return course.name.toLowerCase().match(searchInput);
+          })}
             pageLimit={5}
             dataLimit={4}
           />
@@ -43,6 +67,45 @@ const Tabs = () => {
     
   )
 }
+
+const SearchWrapper = styled.div`
+input[type="search"] {
+  box-sizing: border-box;
+}
+input, input::placeholder {
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+}
+.Search {
+  top:-5px;
+  position: relative;
+  display: flex;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.Search-box {
+  flex: 1 0 auto;
+  margin: 0;
+  padding: 8px 20px;
+  height: 46px;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  transition: all .15s ease-in-out;
+}
+.Search-box:focus {
+  flex: 1 0 90%;
+  margin-left: 20px;
+  outline: 0;
+}
+
+.Search-label {
+  position: absolute;
+  right: 15px;
+  top: 5px;
+  font-size: 20px;
+  transition: all .15s ease-in-out;
+}
+`
 
 const TabsWrapper = styled.div`
 .active-tab{
