@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from "styled-components";
 import StarRating from '../components/StarRating';
 import {MdInfo} from "react-icons/md";
@@ -13,6 +13,8 @@ import { logout, useAuth } from '../auth';
 import TokenExpiredModal from '../components/TokenExpiredModal';
 import LoginPage from './LoginPage'
 import HomePage from './HomePage';
+import { Button, Modal } from 'react-bootstrap';
+import ErrorModal from '../components/ErrorModal';
 
 const LoggedInUser = (course_id, user_id) => {
   user_id = course_id.user_id
@@ -23,6 +25,15 @@ const LoggedInUser = (course_id, user_id) => {
     const [enrolledCourse, setEnrolledCourse] = useState()
     const [duration, setDuration] = useState()
     const [actualUser, setActualUser] = useState()
+    const history = useHistory()
+    const [showModalError, setShowModalError] = useState(false);
+    const [show, setShow] = useState(false)
+    const closeModal = () => {
+      setShow(false)
+    }
+    const showModal = () => {
+      setShow(true)
+    }
 
     const token=localStorage.getItem('REACT_TOKEN_AUTH_KEY')
     const requestOptions ={
@@ -103,11 +114,70 @@ useEffect(
         .catch(err=>console.log(err))
     },[]
 );
+
+const deleteEnrolledCourse = (user_id, course_id) => {
+
+  const requestOptionsDelete={
+    method:'DELETE',
+    headers:{
+        'content-type':'application/json',
+        'Authorization':`Bearer ${JSON.parse(token)}`
+    }
+  }
+  fetch(`/enrolled_course/enrolled_course/${course_id}/${user_id}`, requestOptionsDelete)
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.msg == "Token has expired" | data.msg == "Not enough segments"){
+      closeModal()
+      logout();
+      setShowModalTokenExpired(true);
+    }
+    else if(data.status == 1){
+      history.push('/my-profile')
+    }
+    else{
+      closeModal()
+      setShowModalError(true)
+    }
+  })
+  .catch(err=>console.log(err))
+}
   return (
     <>
     {enrolledCourse && actualUser?.id==user_id?
     <SingleCourseWrapper>
         {showModalTokenExpired?<TokenExpiredModal/>:null}
+        {showModalError?<ErrorModal/>:null}
+        <Modal
+              size="lg"
+              show={show}
+              onHide={closeModal}
+              scrollable={true}
+              centered
+            >
+              <ModalWrapper>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <h3 className='wait'>
+                    Wait..
+                  </h3>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <h3 className='content'>
+                  Are you sure you want to unenroll the course?
+                </h3>
+                
+              </Modal.Body>
+              <Modal.Footer>
+                <ButtonWrapper>
+                  <Button variant="outline-dark" className='save__button' onClick={() => {deleteEnrolledCourse(user_id, course_id)}}>
+                    Unenroll
+                  </Button>
+                  </ButtonWrapper>
+              </Modal.Footer>
+              </ModalWrapper>
+            </Modal>
       <div className='course-intro mx-auto grid'>
         <div className='course-img'>
           <img src = {course?.course_image? course?.course_image : course_images.image} alt = {course?.name} className="img"/>
@@ -148,7 +218,9 @@ useEffect(
           <div className='course-foot'>
             <div className='course-price'>
               {enrolledCourse?.is_finished?<span className='free-price fs-26 fw-8' style={{"color":"green"}}>Finished</span>:<span className='free-price fs-26 fw-8' style={{"color":"red"}}>In progress</span>}
-              
+              <Link to="#" onClick={()=>{showModal()}} className='delete-btn d-inline-block'>
+                Unenroll
+              </Link>
             </div>
           </div>
         </div>
@@ -203,12 +275,63 @@ const EnrolledCoursePage = () => {
   )
 }
 
+const ButtonWrapper = styled.div`
+.save__button{
+  width: 150px;
+  height: 50px;
+  border: 0px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  background: #c21b4e;
+  transition: 0.5s;
+  :hover{
+      background-color: #a024c9;
+  }
+}
+`
+const ModalWrapper = styled.div`
+  .wait, .content{
+    color: #c21b4e;
+    font-weight: 700;
+  }
+
+  .wait{
+    font-size: 2rem;
+    padding: 5px 0px 0px 20px;
+  }
+  .content{
+    font-size: 1.8rem;
+    padding: 20px 20px;
+  }
+
+  .save__button{
+
+  }
+`
 const SingleCourseWrapper = styled.div`
   background: var(--clr-dark);
   color: var(--clr-white);
     .content-item{
         border: 1px solid #878787;
     }
+
+    .delete-btn{
+      height: 50px;
+      width: 130px;
+      margin-left: 25px;
+      padding: 7px 25px;
+      font-size: 20px;
+      border: 1px solid white;
+      transition: 0.5s ease;
+      :hover{
+          background: #700808;
+      }
+      span{
+        margin-left: 12px;
+      }
+    }
+
   .content-body{
     background:#ededed;
   }
