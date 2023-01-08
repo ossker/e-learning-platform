@@ -89,13 +89,13 @@ class SignUp(Resource):
         db_user_username = UserModel.query.filter_by(username=username).first()
         db_user_email = UserModel.query.filter_by(username=email).first()
         if db_user_username is not None:
-            return jsonify({"message": f"User with username {username} already exists."})
+            return {"status": 0}
         elif db_user_email is not None:
-            return jsonify({"message": f"User with username {email} already exists."})
+            return {"status": 0}
         new_user_entity = create_user(data)
         new_user_model = user_entity_to_model(new_user_entity)
         add_user(new_user_model)
-        return jsonify({"message": "User created successfully."})
+        return {"status": 1}
 
 
 @auth_ns.route('/login')
