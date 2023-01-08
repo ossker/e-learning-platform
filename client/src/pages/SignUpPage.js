@@ -6,11 +6,12 @@ import { useForm }  from 'react-hook-form'
 import {  MdReportGmailerrorred, MdCancel } from 'react-icons/md';
 import { useAuth } from '../auth';
 import HomePage from './HomePage'
+import ErrorModal from "../components/ErrorModal";
 
 const LoggedInUser = () => {
     const {register, watch, handleSubmit, reset, formState:{errors}} = useForm();
-    const [serverResponse, setServerResponse] = useState("");
     const [showError, setShowError] = useState();
+    const [showModalError, setShowModalError] = useState(false);
     const history = useHistory();
 
     const submitForm = (data) => {
@@ -37,17 +38,20 @@ const LoggedInUser = () => {
             fetch('/auth/signup', requestOptions)
             .then(res=>res.json())
             .then(data=>{
-                setServerResponse(data.message)
-            })
-            .catch(err=>console.log(err))
-                if(serverResponse=="User created successfully.")
+                if(data.status == 1)
                 {
                     reset();
                     history.push('/login')
                 }
-                else{
+                else if(data.status == 0){
                     setShowError(true);
                 }
+                else{
+                    setShowModalError(true)
+                }
+            })
+            .catch(err=>console.log(err))
+                
         }
         else {
             alert("Passwords do not match.")
@@ -56,6 +60,7 @@ const LoggedInUser = () => {
 
     return (
 <>
+{showModalError?<ErrorModal/>:null}
             <section className="vh-100" style={{ backgroundColor: "rgb(179, 20, 91)" }}>
                 <div className="container h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
