@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { MdInfoOutline } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
@@ -10,18 +10,19 @@ const CoursesPage = () => {
   const category_id = useParams();
   const courses = useCourses();
   const [category, setCategory] = useState();
-  
-  const getCategory = () => {
-    {
-      fetch(`/category/category/${category_id.category}`)
+
+
+    useEffect(
+      ()=>{
+        fetch(`/category/category/${category_id.category}`)
       .then(res=>res.json())
       .then(data=>{
           setCategory(data)
       })
       .catch(err=>console.log(err))
-    }}
-
-  getCategory()
+      },[category_id]
+  );
+  
   return (
     <CoursesPageWrapper>
       <div className='container'>
