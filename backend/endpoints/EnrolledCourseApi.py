@@ -11,7 +11,7 @@ from mappers.CourseMapper import course_entity_to_model
 from stores_implementation.CourseStore import find_all_courses, add_course, find_course_by_id, delete_course, \
     update_course, find_courses_by_owner_id, find_courses_by_logged_user, find_course_by_name
 from stores_implementation.EnrolledCourseStore import find_enrolled_course_by_course_id_and_student_id, \
-    add_enrolled_course
+    add_enrolled_course, delete_enrolled_course
 from stores_implementation.UserStore import find_user_by_email
 
 enrolled_course_ns = Namespace('enrolled_course', description="A namespace for CourseEnrolled")
@@ -83,10 +83,10 @@ class EnrolledCourseResource(Resource):
         # return course_to_update
 
     @jwt_required()
-    def delete(self, id):
+    def delete(self, course_id, user_id):
         """Delete a enrolled course by id"""
-        # course_to_delete = find_course_by_id(id)
-        # if course_to_delete:
-        #     delete_course(course_to_delete)
-        #     return jsonify({"message": f"Course id: {id} deleted."})
-        # return jsonify({"message": f"Course id: {id} does not exist."})
+        enrolled_course_to_delete = find_enrolled_course_by_course_id_and_student_id(course_id, user_id)
+        if enrolled_course_to_delete:
+            delete_enrolled_course(enrolled_course_to_delete)
+            return {"status": 1}
+        return {"status": 0}
